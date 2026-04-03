@@ -1,15 +1,12 @@
-import Footer from "./components/layout/footer/Footer";
-import Header from "./components/layout/header/Header";
+import MainLayout from "./components/layout/mainLayout/MainLayout";
 import "./index.css";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 function App() {
   return (
-    <>
-      <Header />
-      <div className="h-100 w-full bg-amber-300"></div>
-      <Footer />
-    </>
+    <MainLayout>
+      <Dashboard />
+    </MainLayout>
   );
 }
-
 export default App;
