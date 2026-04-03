@@ -1,9 +1,10 @@
+import Header from "./components/layout/header/Header";
 import "./index.css";
 
 function App() {
   return (
     <>
-      <h1 className="text-amber-300">Hello Redberry</h1>
+      <Header />
     </>
   );
 }
