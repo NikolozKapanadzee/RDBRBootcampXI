@@ -25,9 +25,9 @@ const Input = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full border rounded-lg px-4 py-3 outline-none ${
-            error ? "border-red-500" : "border-gray-300"
-          } ${Icon ? "pr-10" : ""}`} // make space for icon
+          className={`w-full min-w-90 border rounded-lg px-4 py-3 outline-none ${
+            error ? "border-red-500" : "#D1D1D1"
+          } ${Icon ? "pr-10" : ""}`}
         />
         {Icon && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
