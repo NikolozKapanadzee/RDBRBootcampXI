@@ -17,7 +17,7 @@ const Input = ({
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label className="text-sm text-[(--text-primary)">{label}</label>
+        <label className="text-sm text-[#3D3D3D] font-medium">{label}</label>
       )}
       <div className="relative">
         <input

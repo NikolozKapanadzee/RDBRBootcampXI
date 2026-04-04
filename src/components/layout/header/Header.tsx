@@ -6,7 +6,7 @@ import ProfileIcon from "../../../assets/ProfileIcon.svg";
 import { useModalStore } from "../../../store/modalStore";
 
 const Header = () => {
-  const { openLogin } = useModalStore();
+  const { openLogin, openRegister } = useModalStore();
   const isLoggedIn = false;
   return (
     <header className="flex items-center justify-between px-28 py-4 bg-[#F3F4F6]">
@@ -36,7 +36,9 @@ const Header = () => {
             <Button variant="outline" onClick={openLogin}>
               Log In
             </Button>
-            <Button variant="primary">Sign Up</Button>
+            <Button variant="primary" onClick={openRegister}>
+              Sign Up
+            </Button>
           </>
         )}
       </div>

@@ -1,8 +1,8 @@
-import Modal from "../Modal";
-import { useModalStore } from "../../../../store/modalStore";
-import Button from "../../button/Button";
-import Input from "../../input/Input";
 import { FiEye } from "react-icons/fi";
+import Input from "../../../input/Input";
+import Modal from "../../Modal";
+import { useModalStore } from "../../../../../store/modalStore";
+import Button from "../../../button/Button";
 
 const LoginModal = () => {
   const { isLoginOpen, closeAll } = useModalStore();
