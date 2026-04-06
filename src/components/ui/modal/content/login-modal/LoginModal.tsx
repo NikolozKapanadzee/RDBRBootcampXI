@@ -3,9 +3,19 @@ import Input from "../../../input/Input";
 import Modal from "../../Modal";
 import { useModalStore } from "../../../../../store/modalStore";
 import Button from "../../../button/Button";
-
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
+import { LoginSchema } from "../../../../../validations/LoginSchema";
 const LoginModal = () => {
   const { isLoginOpen, closeAll } = useModalStore();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(LoginSchema) });
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
 
   return (
     <Modal
@@ -20,15 +30,28 @@ const LoginModal = () => {
         </p>
       </div>
       <div className="flex flex-col gap-6">
-        <Input label="Email" type="email" placeholder="you@example.com" />
+        <Input
+          label="Email"
+          type="email"
+          placeholder="you@example.com"
+          error={errors.email?.message}
+          {...register("email")}
+        />
         <Input
           label="Password"
           placeholder="••••••••"
           type="password"
           icon={FiEye}
+          error={errors.password?.message}
+          {...register("password")}
         />
       </div>
-      <Button className="w-full max-w-90 h-12 mt-6">Log In</Button>
+      <Button
+        className="w-full max-w-90 h-12 mt-6"
+        onClick={handleSubmit(onSubmit)}
+      >
+        Log In
+      </Button>
       <div className="flex items-center w-full max-w-90 gap-1 px-4 mt-4">
         <hr className="flex-1 text-[#D1D1D1]" />
         <p className="text-[#8A8A8A]">or</p>

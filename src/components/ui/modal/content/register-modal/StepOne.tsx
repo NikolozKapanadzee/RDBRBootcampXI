@@ -1,11 +1,25 @@
+import { useForm } from "react-hook-form";
 import Button from "../../../button/Button";
 import Input from "../../../input/Input";
+import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
+import { RegisterStepOneSchema } from "../../../../../validations/RegisterStepOneSchema";
 
 type Props = {
   onNext: () => void;
 };
 
 const StepOne = ({ onNext }: Props) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(RegisterStepOneSchema) });
+
+  const onSubmit = (data: any) => {
+    onNext();
+    console.log(data);
+  };
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col items-center gap-1">
@@ -22,9 +36,18 @@ const StepOne = ({ onNext }: Props) => {
         <div className="h-2 flex-1 bg-[#EEEDFC] rounded-full" />
       </div>
 
-      <Input label="Email*" type="email" placeholder="you@example.com" />
+      <Input
+        label="Email*"
+        type="email"
+        placeholder="you@example.com"
+        error={errors.email?.message}
+        {...register("email")}
+      />
 
-      <Button className="w-full max-w-90 h-12 mt-5" onClick={onNext}>
+      <Button
+        className="w-full max-w-90 h-12 mt-5"
+        onClick={handleSubmit(onSubmit)}
+      >
         Next
       </Button>
 
