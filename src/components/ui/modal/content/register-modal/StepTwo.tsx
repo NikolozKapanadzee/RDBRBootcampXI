@@ -4,19 +4,25 @@ import Input from "../../../input/Input";
 import { FiEye } from "react-icons/fi";
 import { FiChevronLeft } from "react-icons/fi";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
+import { RegisterStepTwoSchema } from "../../../../../validations/RegisterStepTwoSchema";
 
 type Props = {
   onNext: () => void;
   onBack: () => void;
 };
 
-const {
-  register,
-  handleSubmit,
-  formState: { errors },
-} = useForm();
-
 const StepTwo = ({ onNext, onBack }: Props) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(RegisterStepTwoSchema) });
+  const onSubmit = (data: any) => {
+    onNext();
+    console.log(data);
+  };
+
   return (
     <div className="flex flex-col items-center">
       <button
@@ -44,15 +50,22 @@ const StepTwo = ({ onNext, onBack }: Props) => {
           type="password"
           placeholder="Password"
           icon={FiEye}
+          error={errors.password?.message}
+          {...register("password")}
         />
         <Input
           label="Confirm Password*"
           type="password"
           placeholder="Confirm Password"
           icon={RiEyeCloseLine}
+          error={errors.confirmPassword?.message}
+          {...register("confirmPassword")}
         />
       </div>
-      <Button className="w-full max-w-90 h-12 mt-5" onClick={onNext}>
+      <Button
+        className="w-full max-w-90 h-12 mt-5"
+        onClick={handleSubmit(onSubmit)}
+      >
         Next
       </Button>
       <div className="flex items-center w-full max-w-90 gap-1 px-4 mt-4">

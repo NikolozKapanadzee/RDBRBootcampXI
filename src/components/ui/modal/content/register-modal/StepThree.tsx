@@ -2,6 +2,9 @@ import { useState } from "react";
 import Button from "../../../button/Button";
 import Input from "../../../input/Input";
 import { FiUpload, FiChevronLeft } from "react-icons/fi";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
+import { RegisterStepThreeSchema } from "../../../../../validations/RegisterStepThreeSchema";
 
 type Props = {
   onBack: () => void;
@@ -10,11 +13,23 @@ type Props = {
 const StepThree = ({ onBack }: Props) => {
   const [fileName, setFileName] = useState<string | null>(null);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({ resolver: yupResolver(RegisterStepThreeSchema) });
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setFileName(file.name);
+      setValue("avatar", file);
     }
+  };
+
+  const onSubmit = (data: any) => {
+    console.log(data);
   };
 
   return (
@@ -41,7 +56,12 @@ const StepThree = ({ onBack }: Props) => {
         <div className="h-2 flex-1 bg-[#B7B3F4] rounded-full" />
       </div>
 
-      <Input label="Username*" placeholder="Username" />
+      <Input
+        label="Username*"
+        placeholder="Username"
+        error={errors.username?.message}
+        {...register("username")}
+      />
 
       <div
         className="border  rounded-lg p-6 flex flex-col items-center gap-2 cursor-pointer hover:bg-gray-50 w-full max-w-90 mt-4"
@@ -68,7 +88,12 @@ const StepThree = ({ onBack }: Props) => {
         )}
       </div>
 
-      <Button className="w-full max-w-90 h-12 mt-5">Sign Up</Button>
+      <Button
+        className="w-full max-w-90 h-12 mt-5"
+        onClick={handleSubmit(onSubmit)}
+      >
+        Sign Up
+      </Button>
 
       <div className="flex items-center w-full max-w-90 gap-1 px-4 mt-4">
         <hr className="flex-1" />
