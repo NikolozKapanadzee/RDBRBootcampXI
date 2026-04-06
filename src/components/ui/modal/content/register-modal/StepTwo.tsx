@@ -7,10 +7,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepTwoSchema } from "../../../../../validations/RegisterStepTwoSchema";
 
-type Props = {
-  onNext: () => void;
-  onBack: () => void;
-};
+type Props = { onNext: (data: any) => void; onBack: () => void };
 
 const StepTwo = ({ onNext, onBack }: Props) => {
   const {
@@ -18,10 +15,7 @@ const StepTwo = ({ onNext, onBack }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(RegisterStepTwoSchema) });
-  const onSubmit = (data: any) => {
-    onNext();
-    console.log(data);
-  };
+  const onSubmit = (data: any) => onNext(data);
 
   return (
     <div className="flex flex-col items-center">

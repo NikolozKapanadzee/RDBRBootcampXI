@@ -4,9 +4,7 @@ import Input from "../../../input/Input";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepOneSchema } from "../../../../../validations/RegisterStepOneSchema";
 
-type Props = {
-  onNext: () => void;
-};
+type Props = { onNext: (data: any) => void };
 
 const StepOne = ({ onNext }: Props) => {
   const {
@@ -15,10 +13,7 @@ const StepOne = ({ onNext }: Props) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(RegisterStepOneSchema) });
 
-  const onSubmit = (data: any) => {
-    onNext();
-    console.log(data);
-  };
+  const onSubmit = (data: any) => onNext(data);
 
   return (
     <div className="flex flex-col items-center">

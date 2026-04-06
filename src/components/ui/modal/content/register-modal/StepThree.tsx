@@ -6,11 +6,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepThreeSchema } from "../../../../../validations/RegisterStepThreeSchema";
 
-type Props = {
-  onBack: () => void;
-};
+type Props = { onBack: () => void; onSubmit: (data: any) => void };
 
-const StepThree = ({ onBack }: Props) => {
+const StepThree = ({ onBack, onSubmit: handleFormSubmit }: Props) => {
   const [fileName, setFileName] = useState<string | null>(null);
 
   const {
@@ -29,7 +27,7 @@ const StepThree = ({ onBack }: Props) => {
   };
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    handleFormSubmit(data);
   };
 
   return (
