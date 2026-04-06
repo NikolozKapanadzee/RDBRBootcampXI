@@ -9,13 +9,12 @@ const FeaturedCourses = () => {
     const fetchedFeaturedCourses = async () => {
       const data = await getFeaturedCourses();
       setCourses(data);
-      console.log(data);
     };
     fetchedFeaturedCourses();
   }, []);
 
   return (
-    <section className="flex items-center w-full max-w-392">
+    <section className="w-full px-14 py-10 flex items-center justify-center gap-6">
       {courses.map((course) => (
         <FeaturedCard
           title={course.title}
