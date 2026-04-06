@@ -21,7 +21,7 @@ const StepThree = ({ onBack }: Props) => {
     <div className="flex flex-col items-center relative w-full">
       <button
         onClick={onBack}
-        className="absolute top-0 left-0 text-gray-400 hover:text-gray-600 cursor-pointer"
+        className="absolute -top-3 -left-6 text-gray-400 hover:text-gray-600 cursor-pointer"
       >
         <FiChevronLeft className="w-5 h-5" />
       </button>
