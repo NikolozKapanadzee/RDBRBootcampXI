@@ -1,15 +1,17 @@
-import Footer from "./components/layout/footer/Footer";
-import Header from "./components/layout/header/Header";
+import MainLayout from "./components/layout/mainLayout/MainLayout";
+import LoginModal from "./components/ui/modal/content/login-modal/LoginModal";
+import RegisterModal from "./components/ui/modal/content/register-modal/RegisterModal";
+
 import "./index.css";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 function App() {
   return (
-    <>
-      <Header />
-      <div className="h-100 w-full bg-amber-300"></div>
-      <Footer />
-    </>
+    <MainLayout>
+      <Dashboard />
+      <LoginModal />
+      <RegisterModal />
+    </MainLayout>
   );
 }
-
 export default App;

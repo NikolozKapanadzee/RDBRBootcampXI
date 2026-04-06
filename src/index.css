@@ -1,6 +1,70 @@
 @import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
 
 :root {
   --text-primary: #111827;
   --text-secondary: #666666;
+  background-color: #f5f5f5;
+}
+
+.swiper {
+  border-radius: 30px;
+  margin: 0 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: white !important;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  top: auto !important;
+  bottom: 30px !important;
+}
+
+.swiper-button-prev {
+  right: 80px !important;
+  left: auto !important;
+}
+
+.swiper-button-next {
+  right: 30px !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 10px !important;
+  font-weight: bold;
+}
+
+.swiper-pagination {
+  text-align: center;
+  bottom: 48px !important;
+  width: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%);
+}
+
+.swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.4;
+  border-radius: 4px;
+  width: 30px !important;
+  height: 4px !important;
+  transition: opacity 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+}
+
+.swiper-button-next svg,
+.swiper-button-prev svg {
+  width: 18px !important;
+  height: 18px !important;
 }
