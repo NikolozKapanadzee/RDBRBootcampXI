@@ -6,6 +6,8 @@ import Button from "../../../button/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { LoginSchema } from "../../../../../validations/LoginSchema";
+import { loginUser } from "../../../../../api/auth";
+import { useAuthStore } from "../../../../../store/authStore";
 const LoginModal = () => {
   const { isLoginOpen, closeAll } = useModalStore();
   const {
@@ -13,8 +15,12 @@ const LoginModal = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(LoginSchema) });
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const { setUser, setToken } = useAuthStore();
+  const onSubmit = async (data: any) => {
+    const response = await loginUser(data.email, data.password);
+    setToken(response.data.token);
+    setUser(response.data.user);
+    closeAll();
   };
 
   return (

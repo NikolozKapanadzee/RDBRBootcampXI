@@ -4,10 +4,13 @@ import Button from "../../ui/button/Button";
 import EnrolledCoursesIcon from "../../../assets/EnrolledCourses.svg";
 import ProfileIcon from "../../../assets/ProfileIcon.svg";
 import { useModalStore } from "../../../store/modalStore";
+import { useAuthStore } from "../../../store/authStore";
 
 const Header = () => {
   const { openLogin, openRegister } = useModalStore();
-  const isLoggedIn = false;
+  const { token } = useAuthStore();
+
+  const isLoggedIn = !!token;
   return (
     <header className="flex items-center justify-between px-28 py-4 bg-[#F3F4F6]">
       <div>

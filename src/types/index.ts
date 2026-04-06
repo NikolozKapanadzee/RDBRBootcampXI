@@ -57,3 +57,10 @@ export interface FeaturedCourse {
     avatar: string;
   };
 }
+
+export interface AuthStore {
+  user: any | null;
+  token: string | null;
+  setUser: (user: any) => void;
+  setToken: (token: string) => void;
+}
