@@ -7,7 +7,7 @@ import { useModalStore } from "../../../store/modalStore";
 import { useAuthStore } from "../../../store/authStore";
 
 const Header = () => {
-  const { openLogin, openRegister } = useModalStore();
+  const { openLogin, openRegister, openProfile } = useModalStore();
   const { token } = useAuthStore();
 
   const isLoggedIn = !!token;
@@ -32,6 +32,7 @@ const Header = () => {
               className="w-13 h-13 cursor-pointer"
               src={ProfileIcon}
               alt="Profile Icon"
+              onClick={openProfile}
             />
           </>
         ) : (

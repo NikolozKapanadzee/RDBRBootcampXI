@@ -16,6 +16,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
       type = "text",
       value,
       onChange,
+      disabled,
       ...rest
     },
     ref,
@@ -31,6 +32,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
             {...rest}
             ref={ref}
             value={value}
+            disabled={disabled}
             onChange={onChange}
             placeholder={placeholder}
             className={`w-full min-w-90 border rounded-lg px-4 py-3 outline-none ${

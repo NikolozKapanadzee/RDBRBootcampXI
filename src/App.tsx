@@ -1,5 +1,6 @@
 import MainLayout from "./components/layout/mainLayout/MainLayout";
 import LoginModal from "./components/ui/modal/content/login-modal/LoginModal";
+import ProfileModal from "./components/ui/modal/content/profile-modal/ProfileModal";
 import RegisterModal from "./components/ui/modal/content/register-modal/RegisterModal";
 
 import "./index.css";
@@ -11,6 +12,7 @@ function App() {
       <Dashboard />
       <LoginModal />
       <RegisterModal />
+      <ProfileModal />
     </MainLayout>
   );
 }
