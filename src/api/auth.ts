@@ -36,3 +36,22 @@ export const getMe = async (token?: string) => {
   }
   return res.json();
 };
+export const updateProfile = async (data: any, token: string) => {
+  const formData = new FormData();
+  if (data.fullName) formData.append("full_name", data.fullName);
+  if (data.mobileNumber) formData.append("mobile_number", data.mobileNumber);
+  if (data.age) formData.append("age", data.age.toString());
+  if (data.avatar) formData.append("avatar", data.avatar);
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/profile`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw err;
+  }
+  return res.json();
+};

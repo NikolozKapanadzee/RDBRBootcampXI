@@ -5,7 +5,7 @@ import Modal from "../../Modal";
 import { FiEdit2, FiCheck, FiUpload } from "react-icons/fi";
 import Button from "../../../button/Button";
 import { useAuthStore } from "../../../../../store/authStore";
-import { getMe } from "../../../../../api/auth";
+import { getMe, updateProfile } from "../../../../../api/auth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ProfileSchema } from "../../../../../validations/ProfileSchema";
@@ -13,35 +13,48 @@ import { ProfileSchema } from "../../../../../validations/ProfileSchema";
 const ProfileModal = () => {
   const { isProfileOpen, closeAll } = useModalStore();
   const { user, setUser, token } = useAuthStore();
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarFileName, setAvatarFileName] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(ProfileSchema),
+    mode: "onChange",
+  });
+
+  useEffect(() => {
+    if (isProfileOpen) {
+      reset({
+        fullName: user?.fullName || "",
+        mobileNumber: user?.mobileNumber || "",
+        age: user?.age || 16,
+      });
+    }
+  }, [isProfileOpen, user, reset]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFileName(file.name);
+      setAvatarFile(file);
+      setAvatarFileName(file.name);
     }
   };
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        if (!token) return;
-        const data = await getMe(token);
-        console.log(data);
-        setUser(data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    if (isProfileOpen) {
-      fetchUser();
-    }
-  }, [isProfileOpen, token, setUser]);
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({ resolver: yupResolver(ProfileSchema) });
+  const onSubmit = async (data: any) => {
+    try {
+      if (!token) return;
+      await updateProfile({ ...data, avatar: avatarFile }, token);
+      const fresh = await getMe(token);
+      setUser(fresh.data);
+      closeAll();
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
 
   return (
     <Modal isOpen={isProfileOpen} onClose={closeAll} className="flex flex-col">
@@ -54,21 +67,26 @@ const ProfileModal = () => {
             alt="User Profile"
             className="w-16 h-16 rounded-full object-cover"
           />
-          <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white" />
+          <div
+            className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white ${
+              user?.profileComplete ? "bg-green-500" : "bg-[#F4A316]"
+            }`}
+          />
         </div>
         <div>
           <h2 className="text-xl font-bold">{user?.username}</h2>
-          <p className="text-green-500 text-sm">
+          <p
+            className={`text-sm ${user?.profileComplete ? "text-green-500" : "text-[#F4A316]"}`}
+          >
             {user?.profileComplete
               ? "Profile is Complete"
               : "Profile is Incomplete"}
           </p>
         </div>
       </div>
-
       <Input
         label="Full Name"
-        placeholder="Username"
+        placeholder="Full Name"
         icon={FiEdit2}
         error={errors?.fullName?.message}
         {...register("fullName")}
@@ -77,6 +95,7 @@ const ProfileModal = () => {
         label="Email"
         placeholder="Email@gmail.com"
         icon={FiCheck}
+        value={user?.email || ""}
         disabled
       />
 
@@ -89,26 +108,33 @@ const ProfileModal = () => {
             <span className="text-gray-400 mr-2">+995</span>
             <input
               type="tel"
-              placeholder="599209820"
+              {...register("mobileNumber")}
               className="outline-none bg-transparent w-full"
             />
           </div>
+          {errors.mobileNumber && (
+            <p className="text-red-500 text-sm">
+              {errors.mobileNumber.message}
+            </p>
+          )}
         </div>
-
         <div className="flex flex-col gap-1 w-24">
           <label className="text-sm text-[#3D3D3D] font-medium">Age</label>
-          <select {...register("age")}>
-            {Array.from({ length: 100 }, (_, i) => i + 1).map((age) => (
+          <select
+            {...register("age")}
+            className="border rounded-lg px-3 py-3 bg-gray-50 outline-none"
+          >
+            {Array.from({ length: 105 }, (_, i) => i + 16).map((age) => (
               <option key={age} value={age}>
                 {age}
               </option>
             ))}
           </select>
-          <p className="text-red-500 text-sm">{errors.age?.message}</p>
+          {errors.age && (
+            <p className="text-red-500 text-sm">{errors.age.message}</p>
+          )}
         </div>
       </div>
-
-      {/* Avatar Upload */}
       <div className="flex flex-col gap-1 mt-4">
         <label className="text-sm text-[#3D3D3D] font-medium">
           Upload Avatar
@@ -124,8 +150,10 @@ const ProfileModal = () => {
             className="hidden"
             onChange={handleFileChange}
           />
-          {fileName ? (
-            <p className="text-sm text-[#4F46E5] font-medium">{fileName}</p>
+          {avatarFileName ? (
+            <p className="text-sm text-[#4F46E5] font-medium">
+              {avatarFileName}
+            </p>
           ) : (
             <>
               <FiUpload className="w-6 h-6 text-gray-400" />
@@ -138,10 +166,10 @@ const ProfileModal = () => {
           )}
         </div>
       </div>
-
-      <Button className="w-full h-12 mt-6">Update Profile</Button>
+      <Button className="w-full h-12 mt-6" onClick={handleSubmit(onSubmit)}>
+        Update Profile
+      </Button>
     </Modal>
   );
 };
-
 export default ProfileModal;

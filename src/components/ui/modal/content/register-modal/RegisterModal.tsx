@@ -4,7 +4,7 @@ import Modal from "../../Modal";
 import StepOne from "./StepOne";
 import StepThree from "./StepThree";
 import StepTwo from "./StepTwo";
-import { registerUser } from "../../../../../api/auth";
+import { getMe, registerUser } from "../../../../../api/auth";
 import { useAuthStore } from "../../../../../store/authStore";
 
 const RegisterModal = () => {
@@ -27,7 +27,8 @@ const RegisterModal = () => {
     const finalData = { ...formData, ...data };
     const response = await registerUser(finalData);
     setToken(response.data.token);
-    setUser(response.data.user);
+    const me = await getMe(response.data.token);
+    setUser(me.data);
     closeAll();
   };
 

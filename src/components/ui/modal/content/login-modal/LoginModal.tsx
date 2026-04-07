@@ -6,7 +6,7 @@ import Button from "../../../button/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { LoginSchema } from "../../../../../validations/LoginSchema";
-import { loginUser } from "../../../../../api/auth";
+import { loginUser, getMe } from "../../../../../api/auth";
 import { useAuthStore } from "../../../../../store/authStore";
 const LoginModal = () => {
   const { isLoginOpen, closeAll } = useModalStore();
@@ -19,7 +19,8 @@ const LoginModal = () => {
   const onSubmit = async (data: any) => {
     const response = await loginUser(data.email, data.password);
     setToken(response.data.token);
-    setUser(response.data.user);
+    const me = await getMe(response.data.token);
+    setUser(me.data);
     closeAll();
   };
 
