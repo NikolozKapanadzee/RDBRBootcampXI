@@ -6,10 +6,18 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepThreeSchema } from "../../../../../validations/RegisterStepThreeSchema";
 
-type Props = { onBack: () => void; onSubmit: (data: any) => void };
-
-const StepThree = ({ onBack, onSubmit: handleFormSubmit }: Props) => {
+type Props = {
+  onBack: () => void;
+  onSubmit: (data: any) => void;
+  apiErrors?: Record<string, string>;
+};
+const StepThree = ({
+  onBack,
+  onSubmit: handleFormSubmit,
+  apiErrors,
+}: Props) => {
   const [fileName, setFileName] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
 
   const {
     register,
@@ -20,10 +28,18 @@ const StepThree = ({ onBack, onSubmit: handleFormSubmit }: Props) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setFileName(file.name);
-      setValue("avatar", file);
+    if (!file) return;
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      setFileError("Only JPG, PNG or WebP files are allowed");
+      e.target.value = "";
+      setFileName(null);
+      return;
     }
+
+    setFileError(null);
+    setFileName(file.name);
+    setValue("avatar", file);
   };
 
   const onSubmit = (data: any) => {
@@ -57,7 +73,7 @@ const StepThree = ({ onBack, onSubmit: handleFormSubmit }: Props) => {
       <Input
         label="Username*"
         placeholder="Username"
-        error={errors.username?.message}
+        error={errors.username?.message || apiErrors?.username}
         {...register("username")}
       />
 
@@ -65,6 +81,11 @@ const StepThree = ({ onBack, onSubmit: handleFormSubmit }: Props) => {
         className="border  rounded-lg p-6 flex flex-col items-center gap-2 cursor-pointer hover:bg-gray-50 w-full max-w-90 mt-4"
         onClick={() => document.getElementById("avatar")?.click()}
       >
+        {(fileError || apiErrors?.avatar) && (
+          <p className="text-red-500 text-sm mt-1 self-start">
+            {fileError || apiErrors?.avatar}
+          </p>
+        )}
         <input
           type="file"
           id="avatar"

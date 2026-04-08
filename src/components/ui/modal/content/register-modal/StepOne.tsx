@@ -4,9 +4,12 @@ import Input from "../../../input/Input";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepOneSchema } from "../../../../../validations/RegisterStepOneSchema";
 
-type Props = { onNext: (data: any) => void };
+type Props = {
+  onNext: (data: any) => void;
+  apiErrors?: Record<string, string>;
+};
 
-const StepOne = ({ onNext }: Props) => {
+const StepOne = ({ onNext, apiErrors }: Props) => {
   const {
     register,
     handleSubmit,
@@ -35,7 +38,7 @@ const StepOne = ({ onNext }: Props) => {
         label="Email*"
         type="email"
         placeholder="you@example.com"
-        error={errors.email?.message}
+        error={errors.email?.message || apiErrors?.email}
         {...register("email")}
       />
 

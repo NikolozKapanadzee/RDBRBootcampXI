@@ -7,9 +7,13 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepTwoSchema } from "../../../../../validations/RegisterStepTwoSchema";
 
-type Props = { onNext: (data: any) => void; onBack: () => void };
+type Props = {
+  onNext: (data: any) => void;
+  onBack: () => void;
+  apiErrors?: Record<string, string>;
+};
 
-const StepTwo = ({ onNext, onBack }: Props) => {
+const StepTwo = ({ onNext, onBack, apiErrors }: Props) => {
   const {
     register,
     handleSubmit,
@@ -44,7 +48,7 @@ const StepTwo = ({ onNext, onBack }: Props) => {
           type="password"
           placeholder="Password"
           icon={FiEye}
-          error={errors.password?.message}
+          error={errors.password?.message || apiErrors?.password}
           {...register("password")}
         />
         <Input
@@ -52,7 +56,9 @@ const StepTwo = ({ onNext, onBack }: Props) => {
           type="password"
           placeholder="Confirm Password"
           icon={RiEyeCloseLine}
-          error={errors.confirmPassword?.message}
+          error={
+            errors.confirmPassword?.message || apiErrors?.password_confirmation
+          }
           {...register("confirmPassword")}
         />
       </div>
