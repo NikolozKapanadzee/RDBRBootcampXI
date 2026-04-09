@@ -76,3 +76,11 @@ export interface AuthStore {
   setUser: (user: any) => void;
   setToken: (token: string) => void;
 }
+
+export interface InProgressCarsProps {
+  thumbnail: string;
+  lecturer: string;
+  rating: number;
+  title: string;
+  percentage: number;
+}
