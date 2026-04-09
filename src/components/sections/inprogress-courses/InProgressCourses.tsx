@@ -10,21 +10,28 @@ const InProgressCourses = () => {
         </h1>
 
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">Pick up where you left</p>
-          <p className="text-sm text-indigo-600 cursor-pointer">See All</p>
+          <p className="text-[18px] text-[#3D3D3D]">Pick up where you left</p>
+          <p className="text-[18px] text-indigo-600 cursor-pointer">See All</p>
         </div>
       </div>
-      <div className="flex gap-6 justify-center">
-        {mockContinueLearningCourses.map((course) => (
-          <InProgressCard
-            key={course.id}
-            title={course.title}
-            lecturer={course.instructor}
-            rating={course.rating}
-            percentage={course.progress}
-            thumbnail={course.image}
-          />
-        ))}
+      <div className="relative">
+        <div className="flex gap-6 justify-center">
+          {mockContinueLearningCourses.map((course) => (
+            <InProgressCard
+              key={course.id}
+              title={course.title}
+              lecturer={course.instructor}
+              rating={course.rating}
+              percentage={course.progress}
+              thumbnail={course.image}
+            />
+          ))}
+        </div>
+
+        <div
+          className="absolute inset-0 rounded-xl"
+          style={{ backdropFilter: "blur(8px)" }}
+        />
       </div>
     </section>
   );
