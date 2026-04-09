@@ -1,5 +1,6 @@
 import { mockContinueLearningCourses } from "../../../mock/InProgressCoursesMock";
 import InProgressCard from "../../ui/inprogress-cad/InProgressCard";
+import PopUpModal from "../../ui/modal/content/popup-modal/PopUpModal";
 
 const InProgressCourses = () => {
   return (
@@ -27,12 +28,12 @@ const InProgressCourses = () => {
             />
           ))}
         </div>
-
         <div
           className="absolute inset-0 rounded-xl"
           style={{ backdropFilter: "blur(8px)" }}
         />
       </div>
+      <PopUpModal className="flex flex-col gap-5" />
     </section>
   );
 };
