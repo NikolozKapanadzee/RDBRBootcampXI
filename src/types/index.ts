@@ -12,6 +12,7 @@ export interface InputProps {
   placeholder?: string;
   type?: string;
   value?: string;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -56,4 +57,22 @@ export interface FeaturedCourse {
     name: string;
     avatar: string;
   };
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  avatar: string;
+  fullName: string;
+  mobileNumber: string;
+  age: number;
+  profileComplete: boolean;
+}
+
+export interface AuthStore {
+  user: User | null;
+  token: string | null;
+  setUser: (user: any) => void;
+  setToken: (token: string) => void;
 }
