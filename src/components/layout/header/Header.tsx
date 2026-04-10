@@ -5,6 +5,7 @@ import EnrolledCoursesIcon from "../../../assets/EnrolledCourses.svg";
 import ProfileIcon from "../../../assets/User.png";
 import { useModalStore } from "../../../store/modalStore";
 import { useAuthStore } from "../../../store/authStore";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { openLogin, openRegister, openProfile } = useModalStore();
@@ -19,7 +20,9 @@ const Header = () => {
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-2">
           <img src={BrowseCoursesIcon} alt="Browse Courses Icon" />
-          <p className="text-(--text-primary)">Browse Courses</p>
+          <Link to="/browse">
+            <p className="text-(--text-primary)">Browse Courses</p>
+          </Link>
         </div>
 
         {isLoggedIn ? (
