@@ -32,8 +32,8 @@ const InProgressCourses = () => {
           className="absolute inset-0 rounded-xl"
           style={{ backdropFilter: "blur(8px)" }}
         />
+        <PopUpModal className="flex flex-col gap-5 w-full max-w-105 items-center bg-[#FFFFFF] p-4 border-[#ADADAD] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl" />
       </div>
-      <PopUpModal className="flex flex-col gap-5" />
     </section>
   );
 };

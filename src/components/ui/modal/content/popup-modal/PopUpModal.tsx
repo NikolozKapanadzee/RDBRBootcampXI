@@ -1,6 +1,9 @@
 import LockIcon from "../../../../../assets/LockIcon.svg";
+import { useModalStore } from "../../../../../store/modalStore";
 import Button from "../../../button/Button";
 const PopUpModal = ({ className }: any) => {
+  const { openLogin } = useModalStore();
+
   return (
     <div className={className}>
       <div>
@@ -9,7 +12,7 @@ const PopUpModal = ({ className }: any) => {
       <p className="text-[#0A0836] text-[16px]">
         Sign in to track your learning progress
       </p>
-      <Button children="Log In" variant="primary" />
+      <Button onClick={openLogin} children="Log In" variant="primary" />
     </div>
   );
 };
