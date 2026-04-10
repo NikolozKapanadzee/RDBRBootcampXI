@@ -1,8 +1,11 @@
+import LeftNavBar from "../../components/sections/left-navbar/LeftNavbar";
+import Breadcrumb from "../../components/ui/breadcrumb/Breadcrumb";
+
 const Browse = () => {
   return (
     <div>
-      <h1>Hello</h1>
-      <p>dsadasfasibsabfsafbais</p>
+      <Breadcrumb />
+      <LeftNavBar />
     </div>
   );
 };

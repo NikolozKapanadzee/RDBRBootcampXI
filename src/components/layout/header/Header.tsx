@@ -13,7 +13,7 @@ const Header = () => {
 
   const isLoggedIn = !!token;
   return (
-    <header className="flex items-center justify-between px-28 py-4 bg-[#F3F4F6]">
+    <header className="flex items-center justify-between px-14 py-4 bg-[#F3F4F6]">
       <div>
         <img src={ProjectLogo} alt="Project Logo" />
       </div>
