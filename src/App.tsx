@@ -8,6 +8,8 @@ import "./index.css";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { useAuthStore } from "./store/authStore";
 import { getMe } from "./api/auth";
+import { Route, Routes } from "react-router-dom";
+import Browse from "./pages/browse/Browse";
 
 function App() {
   const { token, setUser } = useAuthStore();
@@ -26,7 +28,10 @@ function App() {
   }, []);
   return (
     <MainLayout>
-      <Dashboard />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/browse" element={<Browse />} />
+      </Routes>
       <LoginModal />
       <RegisterModal />
       <ProfileModal />
