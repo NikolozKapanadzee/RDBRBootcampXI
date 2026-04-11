@@ -84,3 +84,14 @@ export interface InProgressCarsProps {
   title: string;
   percentage: number;
 }
+
+export interface CardProps {
+  image: string;
+  instructor: string;
+  duration: number;
+  rating: number;
+  title: string;
+  category: string;
+  categoryIcon: string;
+  price: number;
+}
