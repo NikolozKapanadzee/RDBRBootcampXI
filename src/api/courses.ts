@@ -30,3 +30,20 @@ export const getCourses = async (params?: {
   const data = await res.json();
   return data;
 };
+export const getAllCourses = async () => {
+  let allCourses: any[] = [];
+  const firstRes = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/courses?page=1`,
+  );
+  const firstData = await firstRes.json();
+  allCourses = [...firstData.data];
+  const lastPage = firstData.meta.lastPage;
+  for (let page = 2; page <= lastPage; page++) {
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_BASE_URL}/courses?page=${page}`,
+    );
+    const data = await res.json();
+    allCourses = [...allCourses, ...data.data];
+  }
+  return allCourses;
+};

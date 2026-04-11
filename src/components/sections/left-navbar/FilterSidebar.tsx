@@ -1,37 +1,47 @@
-import { useState } from "react";
 import { useFilterOptions } from "../../../hooks/useFilterOptions";
 import { categoryIcons } from "../../../constants/categoryIcons";
-
-const FilterSidebar = () => {
+interface FilterSidebarProps {
+  activeCategories: number[];
+  activeTopics: number[];
+  activeInstructors: number[];
+  setActiveCategories: (v: number[]) => void;
+  setActiveTopics: (v: number[]) => void;
+  setActiveInstructors: (v: number[]) => void;
+}
+const FilterSidebar = ({
+  activeCategories,
+  activeTopics,
+  activeInstructors,
+  setActiveCategories,
+  setActiveTopics,
+  setActiveInstructors,
+}: FilterSidebarProps) => {
   const { categories, topics, instructors } = useFilterOptions();
-  const [activeCategories, setActiveCategories] = useState<number[]>([]);
-  const [activeTopics, setActiveTopics] = useState<number[]>([]);
-  const [activeInstructors, setActiveInstructors] = useState<number[]>([]);
-
   const toggleCategory = (id: number) =>
-    setActiveCategories((prev) =>
-      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id],
+    setActiveCategories(
+      activeCategories.includes(id)
+        ? activeCategories.filter((f) => f !== id)
+        : [...activeCategories, id],
     );
-
   const toggleTopic = (id: number) =>
-    setActiveTopics((prev) =>
-      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id],
+    setActiveTopics(
+      activeTopics.includes(id)
+        ? activeTopics.filter((f) => f !== id)
+        : [...activeTopics, id],
     );
-
   const toggleInstructor = (id: number) =>
-    setActiveInstructors((prev) =>
-      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id],
+    setActiveInstructors(
+      activeInstructors.includes(id)
+        ? activeInstructors.filter((f) => f !== id)
+        : [...activeInstructors, id],
     );
-
   const clearAll = () => {
     setActiveCategories([]);
     setActiveTopics([]);
     setActiveInstructors([]);
   };
-
   const totalActive =
     activeCategories.length + activeTopics.length + activeInstructors.length;
-
   return (
     <section className="flex flex-col w-full max-w-77 gap-6">
       <div className="flex w-full items-center gap-10">
@@ -51,7 +61,7 @@ const FilterSidebar = () => {
             <button
               key={cat.id}
               onClick={() => toggleCategory(cat.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm transition-colors
+              className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm transition-colors cursor-pointer
                 ${
                   activeCategories.includes(cat.id)
                     ? "border-indigo-600 text-indigo-600 bg-indigo-50"
@@ -78,7 +88,7 @@ const FilterSidebar = () => {
             <button
               key={topic.id}
               onClick={() => toggleTopic(topic.id)}
-              className={`px-4 py-2 rounded-full border text-sm transition-colors
+              className={`px-4 py-2 rounded-full border text-sm transition-colors cursor-pointer
                 ${
                   activeTopics.includes(topic.id)
                     ? "border-indigo-600 text-indigo-600 bg-indigo-50"
@@ -98,7 +108,7 @@ const FilterSidebar = () => {
             <button
               key={inst.id}
               onClick={() => toggleInstructor(inst.id)}
-              className={`flex items-center gap-3 px-4 py-2 rounded-xl border text-sm transition-colors
+              className={`flex items-center gap-3 px-4 py-2 rounded-xl border text-sm transition-colors cursor-pointer
                 ${
                   activeInstructors.includes(inst.id)
                     ? "border-indigo-600 text-indigo-600 bg-indigo-50"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCourses } from "../api/courses";
+import { getAllCourses } from "../api/courses";
 
 export const useFilterOptions = () => {
   const [categories, setCategories] = useState<any[]>([]);
@@ -7,22 +7,23 @@ export const useFilterOptions = () => {
   const [instructors, setInstructors] = useState<any[]>([]);
   useEffect(() => {
     const fetch = async () => {
-      const data = await getCourses({ page: 1 });
+      const allCourses = await getAllCourses();
       setCategories([
         ...new Map(
-          data.data.map((c: any) => [c.category.id, c.category]),
+          allCourses.map((c: any) => [c.category.id, c.category]),
         ).values(),
       ]);
       setTopics([
-        ...new Map(data.data.map((c: any) => [c.topic.id, c.topic])).values(),
+        ...new Map(allCourses.map((c: any) => [c.topic.id, c.topic])).values(),
       ]);
       setInstructors([
         ...new Map(
-          data.data.map((c: any) => [c.instructor.id, c.instructor]),
+          allCourses.map((c: any) => [c.instructor.id, c.instructor]),
         ).values(),
       ]);
     };
     fetch();
   }, []);
+
   return { categories, topics, instructors };
 };
