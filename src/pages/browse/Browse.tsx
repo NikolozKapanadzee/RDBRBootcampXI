@@ -1,4 +1,4 @@
-import LeftNavBar from "../../components/sections/left-navbar/LeftNavbar";
+import LeftNavBar from "../../components/sections/left-navbar/FilterSidebar";
 import Breadcrumb from "../../components/ui/breadcrumb/Breadcrumb";
 
 const Browse = () => {
