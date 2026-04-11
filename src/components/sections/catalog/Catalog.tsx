@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getCourses } from "../../../api/courses";
 import Card from "../../ui/card/Card";
+import { categoryIcons } from "../../../constants/categoryIcons";
 
 const Catalog = () => {
   const [courses, setCourses] = useState<any[]>([]);
@@ -14,7 +15,7 @@ const Catalog = () => {
   }, []);
 
   return (
-    <section>
+    <section className="grid grid-cols-3 gap-6">
       {courses.map((course) => (
         <Card
           key={course.id}
@@ -24,7 +25,7 @@ const Catalog = () => {
           rating={course.avgRating}
           title={course.title}
           category={course.category.name}
-          categoryIcon={course.category.icon}
+          categoryIcon={categoryIcons[course.category.name]}
           price={course.basePrice}
         />
       ))}

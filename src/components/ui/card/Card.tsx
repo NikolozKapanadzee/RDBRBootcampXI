@@ -1,5 +1,6 @@
 import type { CardProps } from "../../../types";
 import Button from "../button/Button";
+import StarIcon from "../../../assets/Star.svg";
 
 const Card = ({
   image,
@@ -8,36 +9,41 @@ const Card = ({
   rating,
   title,
   category,
+  categoryIcon,
   price,
 }: CardProps) => {
   return (
-    <div className="course-card">
-      <img className="thumbnail" src={image} />
-
-      <div className="card-body">
-        <div className="meta">
-          <span className="instructor">{instructor}</span>
-          <span className="divider">|</span>
-          <span className="duration">{duration} Weeks</span>
-          <div className="rating">
-            <img className="star-icon" />
-            <span className="score">{rating}</span>
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col overflow-hidden w-full p-4">
+      <img
+        src={image}
+        alt={title}
+        className="w-full rounded-[10px] h-48 object-cover"
+      />
+      <div className="flex flex-col gap-3 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm text-gray-400">
+            <span className="text-[#ADADAD]">{instructor}</span>
+            <span className="text-[#ADADAD]">|</span>
+            <span className="text-[#ADADAD]">{duration} Weeks</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <img src={StarIcon} className="w-4 h-4" />
+            <span className="text-sm font-medium text-gray-700">{rating}</span>
           </div>
         </div>
-
-        <h2 className="title">{title}</h2>
-
-        <div className="category-badge">
-          <img className="category-icon" />
-          <span className="category-name">{category}</span>
+        <h2 className=" text-2xl text-[#000000] font-semibold leading-snug">
+          {title}
+        </h2>
+        <div className="flex items-center gap-2 bg-[#F5F5F5] rounded-lg px-3 py-2 w-fit">
+          {categoryIcon && <img src={categoryIcon} className="w-4 h-4" />}
+          <span className="text-[16px] text-[#525252]">{category}</span>
         </div>
-
-        <div className="card-footer">
-          <div className="price">
-            <span className="starting-from">Starting from</span>
-            <span className="amount">${price}</span>
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex flex-col">
+            <span className="text-xs text-[#ADADAD]">Starting from</span>
+            <span className="text-2xl font-bold text-[#333333]">${price}</span>
           </div>
-          <Button children="Details" variant="primary" />
+          <Button variant="primary">Details</Button>
         </div>
       </div>
     </div>
