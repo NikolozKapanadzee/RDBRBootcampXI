@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getCourses } from "../../../api/courses";
 import Card from "../../ui/card/Card";
 import { categoryIcons } from "../../../constants/categoryIcons";
+import UpperCatalog from "../../ui/upper-catalog/UpperCatalog";
 
 interface CatalogProps {
   activeCategories: number[];
@@ -14,7 +15,12 @@ const Catalog = ({
   activeInstructors,
 }: CatalogProps) => {
   const [courses, setCourses] = useState<any[]>([]);
-  const [meta, setMeta] = useState({ currentPage: 1, lastPage: 1 });
+  const [meta, setMeta] = useState({
+    currentPage: 1,
+    lastPage: 1,
+    perPage: 10,
+    total: 0,
+  });
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     const fetch = async () => {
@@ -32,6 +38,11 @@ const Catalog = ({
 
   return (
     <div className="flex flex-col gap-6">
+      <UpperCatalog
+        total={meta.total}
+        perPage={meta.perPage}
+        currentPage={currentPage}
+      />
       <section className="grid grid-cols-3 gap-6">
         {courses.map((course) => (
           <Card

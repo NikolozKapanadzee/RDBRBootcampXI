@@ -95,3 +95,9 @@ export interface CardProps {
   categoryIcon: string;
   price: number;
 }
+
+export interface UpperCatalogProps {
+  total: number;
+  perPage: number;
+  currentPage: number;
+}
