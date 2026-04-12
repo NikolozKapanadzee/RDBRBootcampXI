@@ -100,4 +100,6 @@ export interface UpperCatalogProps {
   total: number;
   perPage: number;
   currentPage: number;
+  activeSort: string;
+  setActiveSort: (sort: string) => void;
 }

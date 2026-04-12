@@ -8,11 +8,15 @@ interface CatalogProps {
   activeCategories: number[];
   activeTopics: number[];
   activeInstructors: number[];
+  activeSort: string;
+  setActiveSort: (sort: string) => void;
 }
 const Catalog = ({
   activeCategories,
   activeTopics,
   activeInstructors,
+  activeSort,
+  setActiveSort,
 }: CatalogProps) => {
   const [courses, setCourses] = useState<any[]>([]);
   const [meta, setMeta] = useState({
@@ -29,19 +33,27 @@ const Catalog = ({
         categories: activeCategories,
         topics: activeTopics,
         instructors: activeInstructors,
+        sort: activeSort,
       });
       setCourses(data.data);
       setMeta(data.meta);
     };
     fetch();
-  }, [currentPage, activeCategories, activeTopics, activeInstructors]);
-
+  }, [
+    currentPage,
+    activeCategories,
+    activeTopics,
+    activeInstructors,
+    activeSort,
+  ]);
   return (
     <div className="flex flex-col gap-6">
       <UpperCatalog
         total={meta.total}
         perPage={meta.perPage}
         currentPage={currentPage}
+        activeSort={activeSort}
+        setActiveSort={setActiveSort}
       />
       <section className="grid grid-cols-3 gap-6">
         {courses.map((course) => (
@@ -58,7 +70,6 @@ const Catalog = ({
           />
         ))}
       </section>
-
       <div className="flex items-center justify-center gap-2">
         <button
           onClick={() => setCurrentPage((p) => p - 1)}
@@ -67,7 +78,6 @@ const Catalog = ({
         >
           ‹
         </button>
-
         {Array.from({ length: meta.lastPage }, (_, i) => i + 1).map((page) => (
           <button
             key={page}
@@ -81,7 +91,6 @@ const Catalog = ({
             {page}
           </button>
         ))}
-
         <button
           onClick={() => setCurrentPage((p) => p + 1)}
           disabled={currentPage === meta.lastPage}

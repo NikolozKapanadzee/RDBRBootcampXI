@@ -7,6 +7,7 @@ const Browse = () => {
   const [activeCategories, setActiveCategories] = useState<number[]>([]);
   const [activeTopics, setActiveTopics] = useState<number[]>([]);
   const [activeInstructors, setActiveInstructors] = useState<number[]>([]);
+  const [activeSort, setActiveSort] = useState("newest");
   return (
     <div className="px-14 py-10">
       <Breadcrumb />
@@ -26,6 +27,8 @@ const Browse = () => {
             activeCategories={activeCategories}
             activeTopics={activeTopics}
             activeInstructors={activeInstructors}
+            activeSort={activeSort}
+            setActiveSort={setActiveSort}
           />
         </div>
       </div>
