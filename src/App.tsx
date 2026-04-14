@@ -10,6 +10,7 @@ import { useAuthStore } from "./store/authStore";
 import { getMe } from "./api/auth";
 import { Route, Routes } from "react-router-dom";
 import Browse from "./pages/browse/Browse";
+import InsideCoursePage from "./components/sections/inside-course/InsideCoursePage";
 
 function App() {
   const { token, setUser } = useAuthStore();
@@ -31,6 +32,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/browse" element={<Browse />} />
+        <Route path="/course/:id" element={<InsideCoursePage />} />
       </Routes>
       <LoginModal />
       <RegisterModal />
