@@ -47,3 +47,10 @@ export const getAllCourses = async () => {
   }
   return allCourses;
 };
+export const getCourseById = async (id: number) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/courses/${id}`,
+  );
+  const data = await res.json();
+  return data.data;
+};

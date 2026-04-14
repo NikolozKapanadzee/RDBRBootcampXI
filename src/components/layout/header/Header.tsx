@@ -14,9 +14,11 @@ const Header = () => {
   const isLoggedIn = !!token;
   return (
     <header className="flex items-center justify-between px-14 py-4 bg-[#F3F4F6]">
-      <div>
-        <img src={ProjectLogo} alt="Project Logo" />
-      </div>
+      <Link to="/">
+        <div className="cursor-pointer">
+          <img src={ProjectLogo} alt="Project Logo" />
+        </div>
+      </Link>
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-2">
           <img src={BrowseCoursesIcon} alt="Browse Courses Icon" />
