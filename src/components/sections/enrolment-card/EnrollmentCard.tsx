@@ -5,6 +5,9 @@ import {
   getSessionTypes,
 } from "../../../api/courses";
 import ArrowDownIcon from "../../../assets/glyphs_arrow-bold.svg";
+import AuthReq from "../../ui/warning/AuthReq";
+import { useAuthStore } from "../../../store/authStore";
+import CompleteReq from "../../ui/warning/CompleteReq";
 interface EnrollmentCardProps {
   courseId: number;
   basePrice: number;
@@ -22,6 +25,10 @@ const shortLabel = (label: string) =>
     .replace("Weekend Only", "Weekend");
 
 const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
+  const { token, user } = useAuthStore();
+  const IsLoggedIn = !!token;
+  const IsUserCompleted = user?.profileComplete;
+
   const [schedules, setSchedules] = useState<any[]>([]);
   const [timeSlots, setTimeSlots] = useState<any[]>([]);
   const [sessionTypes, setSessionTypes] = useState<any[]>([]);
@@ -203,6 +210,8 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
             Enroll Now
           </button>
         </div>
+        {!IsLoggedIn && <AuthReq />}
+        {!IsUserCompleted && <CompleteReq />}
       </div>
     </div>
   );
