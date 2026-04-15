@@ -8,11 +8,11 @@ import ArrowDownIcon from "../../../assets/glyphs_arrow-bold.svg";
 import AuthReq from "../../ui/warning/AuthReq";
 import { useAuthStore } from "../../../store/authStore";
 import CompleteReq from "../../ui/warning/CompleteReq";
-
 import WarningIcon from "../../../assets/warning.svg";
 import { ALL_SCHEDULES } from "../../../constants/all-schedules";
 import { ALL_TIME_SLOTS } from "../../../constants/all-time-slots";
 import { ALL_SESSION_TYPES } from "../../../constants/all-session-types";
+import { useModalStore } from "../../../store/modalStore";
 
 interface EnrollmentCardProps {
   courseId: number;
@@ -40,6 +40,16 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<any>(null);
   const [selectedSession, setSelectedSession] = useState<any>(null);
 
+  const { openLogin } = useModalStore();
+
+  const handleEnrollClick = () => {
+    if (!IsLoggedIn) {
+      openLogin();
+      return;
+    }
+    if (!selectedSession) return;
+    console.log("Enroll user");
+  };
   useEffect(() => {
     const fetch = async () => {
       const data = await getWeeklySchedules(courseId);
@@ -120,7 +130,7 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
                     setSelectedSession(null);
                   }}
                   disabled={!isAvailable}
-                  className={`flex-1 py-4 px-2 rounded-xl border text-sm font-medium transition-colors
+                  className={`flex-1 py-4 px-2  w-31 h-23 rounded-xl border text-sm font-medium transition-colors
                     ${
                       isSelected
                         ? "border-indigo-500 bg-indigo-100 text-indigo-700"
@@ -167,24 +177,32 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
                       setSelectedSession(null);
                     }}
                     disabled={!isAvailable}
-                    className={`flex-1 py-3 px-3 rounded-xl border text-sm transition-colors flex flex-col items-center gap-1
-                      ${
-                        isSelected
-                          ? "border-indigo-500 bg-indigo-100 text-indigo-700"
-                          : isAvailable
-                            ? "border-gray-300 bg-white text-gray-600 cursor-pointer hover:border-indigo-400"
-                            : "border-transparent bg-[#EBEBEB] text-gray-400 cursor-not-allowed"
-                      }`}
+                    className={`w-43 h-15 p-3.75 rounded-xl border flex items-center gap-2.5 text-left transition-colors
+    ${
+      isSelected
+        ? "border-indigo-500 bg-indigo-100 text-indigo-700"
+        : isAvailable
+          ? "border-gray-300 bg-white text-gray-600 cursor-pointer hover:border-indigo-400"
+          : "border-transparent bg-[#EBEBEB] text-gray-400 cursor-not-allowed"
+    }`}
                   >
                     <img
                       src={slot.icon}
                       alt={slot.name}
-                      className={`w-6 h-6 ${!isAvailable && "opacity-30 grayscale"}`}
+                      className={`w-6 h-6 shrink-0 ${
+                        !isAvailable && "opacity-30 grayscale"
+                      }`}
                     />
-                    <span className="font-medium">{slot.name}</span>
-                    <span className="text-xs">
-                      {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
-                    </span>
+
+                    <div className="flex flex-col leading-tight">
+                      <span className="font-medium text-[14px]">
+                        {slot.name}
+                      </span>
+                      <span className="text-[9px] w-23">
+                        {formatTime(slot.startTime)} –{" "}
+                        {formatTime(slot.endTime)}
+                      </span>
+                    </div>
                   </button>
                 );
               })}
@@ -243,13 +261,17 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
                     >
                       <span className="font-medium">{session.name}</span>
                       <span className="text-xs">{session.location}</span>
-                      {isAvailable && !isFullyBooked && (
-                        <span
-                          className={`text-xs font-medium ${priceMod === 0 ? "text-indigo-500" : "text-gray-600"}`}
-                        >
-                          {priceMod === 0 ? "Included" : `+ $${priceMod}`}
-                        </span>
-                      )}
+                      <span
+                        className={`text-xs font-medium ${
+                          !isAvailable || isFullyBooked
+                            ? "invisible"
+                            : priceMod === 0
+                              ? "text-indigo-500"
+                              : "text-indigo-600"
+                        }`}
+                      >
+                        {priceMod === 0 ? "Included" : `+ $${priceMod}`}
+                      </span>
                     </button>
 
                     <div className="text-xs text-center min-h-4">
@@ -298,12 +320,14 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
             </div>
           </div>
           <button
-            disabled={!selectedSession}
+            onClick={handleEnrollClick}
+            disabled={IsLoggedIn && !selectedSession && IsUserCompleted}
             className={`w-full py-4 rounded-[10px] font-medium mt-2 transition-all ${selectedSession ? "bg-[#130E67] text-white cursor-pointer hover:bg-indigo-800" : "bg-[#EEEDFC] text-[#B7B3F4] cursor-not-allowed"}`}
           >
             Enroll Now
           </button>
         </div>
+
         {!IsLoggedIn && <AuthReq />}
         {IsLoggedIn && !IsUserCompleted && <CompleteReq />}
       </div>
