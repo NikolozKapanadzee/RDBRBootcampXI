@@ -54,3 +54,28 @@ export const getCourseById = async (id: number) => {
   const data = await res.json();
   return data.data;
 };
+export const getWeeklySchedules = async (courseId: number) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/courses/${courseId}/weekly-schedules`,
+  );
+  const data = await res.json();
+  return data.data;
+};
+export const getTimeSlots = async (courseId: number, scheduleId: number) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/courses/${courseId}/time-slots?weekly_schedule_id=${scheduleId}`,
+  );
+  const data = await res.json();
+  return data.data;
+};
+export const getSessionTypes = async (
+  courseId: number,
+  scheduleId: number,
+  timeSlotId: number,
+) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/courses/${courseId}/session-types?weekly_schedule_id=${scheduleId}&time_slot_id=${timeSlotId}`,
+  );
+  const data = await res.json();
+  return data.data;
+};

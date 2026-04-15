@@ -4,6 +4,8 @@ import { getCourseById } from "../../../api/courses";
 import StartIcon from "../../../assets/Star.svg";
 import CalendarIcon from "../../../assets/ClockIcon.svg";
 import ClockIcon from "../../../assets/ClockIcon2.svg";
+import { categoryIcons } from "../../../constants/categoryIcons";
+import EnrollmentCard from "../enrolment-card/EnrollmentCard";
 const InsideCoursePage = () => {
   const { id } = useParams();
   const [course, setCourse] = useState<any>(null);
@@ -31,7 +33,7 @@ const InsideCoursePage = () => {
           <img
             src={course.image}
             alt={course.title}
-            className="w-full h-114 object-cover rounded-2xl border-2 border-blue-400"
+            className="w-full h-114 object-cover rounded-2xl"
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6 text-[#3D3D3D]">
@@ -49,8 +51,14 @@ const InsideCoursePage = () => {
                 <img src={StartIcon} className="w-5 h-5" />
                 <span className="font-medium">{avgRating}</span>
               </div>
-              <div className="flex items-center gap-2 bg-[#F5F5F5] rounded-lg px-3 py-2">
-                <span className="text-sm text-[#525252]">
+              <div className="flex items-center gap-2 bg-[#FFFFFF] rounded-lg px-3 py-2">
+                {categoryIcons[course.category.name] && (
+                  <img
+                    src={categoryIcons[course.category.name]}
+                    className="w-6 h-6"
+                  />
+                )}
+                <span className="text-[16px] text-[#666666]">
                   {course.category.name}
                 </span>
               </div>
@@ -73,7 +81,9 @@ const InsideCoursePage = () => {
           </div>
         </div>
 
-        <div className="w-133 top-6 bg-amber-700 h-180"></div>
+        <div className="w-133  h-180">
+          <EnrollmentCard courseId={Number(id)} basePrice={course.basePrice} />
+        </div>
       </div>
     </section>
   );
