@@ -94,6 +94,7 @@ export interface CardProps {
   category: string;
   categoryIcon: string;
   price: number;
+  id: number;
 }
 
 export interface UpperCatalogProps {

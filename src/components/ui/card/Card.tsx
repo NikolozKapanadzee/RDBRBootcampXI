@@ -1,10 +1,12 @@
 import type { CardProps } from "../../../types";
 import Button from "../button/Button";
 import StarIcon from "../../../assets/Star.svg";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({
   image,
   instructor,
+  id,
   duration,
   rating,
   title,
@@ -12,6 +14,8 @@ const Card = ({
   categoryIcon,
   price,
 }: CardProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col overflow-hidden w-full p-4">
       <img
@@ -43,7 +47,9 @@ const Card = ({
             <span className="text-xs text-[#ADADAD]">Starting from</span>
             <span className="text-2xl font-bold text-[#333333]">${price}</span>
           </div>
-          <Button variant="primary">Details</Button>
+          <Button variant="primary" onClick={() => navigate(`/course/${id}`)}>
+            Details
+          </Button>
         </div>
       </div>
     </div>

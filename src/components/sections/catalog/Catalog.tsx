@@ -60,6 +60,7 @@ const Catalog = ({
           <Card
             key={course.id}
             image={course.image}
+            id={course.id}
             instructor={course.instructor.name}
             duration={course.durationWeeks}
             rating={course.avgRating}
