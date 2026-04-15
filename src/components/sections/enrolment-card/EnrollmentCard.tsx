@@ -8,21 +8,52 @@ import ArrowDownIcon from "../../../assets/glyphs_arrow-bold.svg";
 import AuthReq from "../../ui/warning/AuthReq";
 import { useAuthStore } from "../../../store/authStore";
 import CompleteReq from "../../ui/warning/CompleteReq";
+
 interface EnrollmentCardProps {
   courseId: number;
   basePrice: number;
 }
 
-const shortLabel = (label: string) =>
-  label
-    .replace("Monday", "Mon")
-    .replace("Tuesday", "Tue")
-    .replace("Wednesday", "Wed")
-    .replace("Thursday", "Thu")
-    .replace("Friday", "Fri")
-    .replace("Saturday", "Sat")
-    .replace("Sunday", "Sun")
-    .replace("Weekend Only", "Weekend");
+const formatTime = (time: string) => {
+  const [h, m] = time.split(":");
+  const hour = parseInt(h);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+  return `${displayHour}:${m} ${ampm}`;
+};
+
+const ALL_SCHEDULES = [
+  { key: "mon-wed", label: "Mon - Wed" },
+  { key: "tue-thu", label: "Tue - Thu" },
+  { key: "fri-sat", label: "Fri - Sat" },
+  { key: "weekend", label: "Weekend" },
+];
+const ALL_TIME_SLOTS = [
+  {
+    key: "morning",
+    name: "Morning",
+    startTime: "09:00:00",
+    endTime: "12:00:00",
+  },
+  {
+    key: "afternoon",
+    name: "Afternoon",
+    startTime: "12:00:00",
+    endTime: "18:00:00",
+  },
+  {
+    key: "evening",
+    name: "Evening",
+    startTime: "18:00:00",
+    endTime: "21:00:00",
+  },
+];
+
+const ALL_SESSION_TYPES = [
+  { key: "online", name: "Online", location: "Google Meet" },
+  { key: "in-person", name: "In-Person", location: "Chavchavadze St.34" },
+  { key: "hybrid", name: "Hybrid", location: "Chavchavadze St.34" },
+];
 
 const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
   const { token, user } = useAuthStore();
@@ -30,8 +61,8 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
   const IsUserCompleted = user?.profileComplete;
 
   const [schedules, setSchedules] = useState<any[]>([]);
-  const [timeSlots, setTimeSlots] = useState<any[]>([]);
-  const [sessionTypes, setSessionTypes] = useState<any[]>([]);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<any[]>([]);
+  const [availableSessionTypes, setAvailableSessionTypes] = useState<any[]>([]);
 
   const [selectedSchedule, setSelectedSchedule] = useState<any>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<any>(null);
@@ -49,11 +80,10 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
     if (!selectedSchedule) return;
     setSelectedTimeSlot(null);
     setSelectedSession(null);
-    setSessionTypes([]);
+    setAvailableSessionTypes([]);
     const fetch = async () => {
       const data = await getTimeSlots(courseId, selectedSchedule.id);
-      setTimeSlots(data);
-      console.log("timeSlots", data);
+      setAvailableTimeSlots(data);
     };
     fetch();
   }, [selectedSchedule]);
@@ -67,13 +97,20 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
         selectedSchedule.id,
         selectedTimeSlot.id,
       );
-      setSessionTypes(data);
-      console.log("sessionTypes", data);
+      setAvailableSessionTypes(data);
     };
     fetch();
   }, [selectedTimeSlot]);
+  const getAvailableTimeSlot = (slot: (typeof ALL_TIME_SLOTS)[0]) =>
+    availableTimeSlots.find((t) => t.startTime === slot.startTime);
+  const getAvailableSession = (session: (typeof ALL_SESSION_TYPES)[0]) =>
+    availableSessionTypes.find(
+      (s) => s.name.toLowerCase() === session.key.toLowerCase(),
+    );
 
-  const sessionPrice = selectedSession?.priceModifier ?? 0;
+  const sessionPrice = selectedSession
+    ? parseFloat(selectedSession.priceModifier)
+    : 0;
   const totalPrice = basePrice + sessionPrice;
 
   return (
@@ -89,27 +126,43 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
                 Weekly Schedule
               </h3>
             </div>
-            <img
-              src={ArrowDownIcon}
-              alt="arrow down icon"
-              className="cursor-pointer"
-            />
+            <img src={ArrowDownIcon} alt="arrow" className="cursor-pointer" />
           </div>
           <div className="flex gap-2">
-            {schedules.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => setSelectedSchedule(s)}
-                className={`flex-1 w-40 h-23 rounded-xl border text-sm font-medium transition-colors cursor-pointer
-                  ${
-                    selectedSchedule?.id === s.id
-                      ? "border-indigo-600 bg-white text-indigo-700"
-                      : "border-[#292929] bg-white text-[#292929]"
-                  }`}
-              >
-                {shortLabel(s.label)}
-              </button>
-            ))}
+            {ALL_SCHEDULES.map((s) => {
+              const available = schedules.find((sc) => sc.label === s.label);
+              const isAvailable = !!available;
+              const isSelected = selectedSchedule?.label === s.label;
+
+              return (
+                <button
+                  key={s.key}
+                  onClick={() => {
+                    if (!isAvailable) return;
+                    if (selectedSchedule?.label === s.label) {
+                      setSelectedSchedule(null);
+                      setSelectedTimeSlot(null);
+                      setSelectedSession(null);
+                      setAvailableTimeSlots([]);
+                      setAvailableSessionTypes([]);
+                    } else {
+                      setSelectedSchedule(available);
+                    }
+                  }}
+                  disabled={!isAvailable}
+                  className={`flex-1 py-4 px-2 rounded-xl border text-sm font-medium transition-colors
+          ${
+            isSelected
+              ? "border-indigo-600 bg-white text-indigo-700 cursor-pointer"
+              : isAvailable
+                ? "border-[#292929] bg-white text-[#292929] cursor-pointer"
+                : "border-gray-100 bg-white text-gray-300 cursor-not-allowed"
+          }`}
+                >
+                  {s.label}
+                </button>
+              );
+            })}
           </div>
         </div>
         <div className="flex flex-col gap-3">
@@ -120,31 +173,45 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
               </span>
               <h3 className="text-xl font-bold text-gray-400">Time Slot</h3>
             </div>
-            <img
-              src={ArrowDownIcon}
-              alt="arrow down icon"
-              className="cursor-pointer"
-            />
+            <img src={ArrowDownIcon} alt="arrow" className="cursor-pointer" />
           </div>
-          {selectedSchedule && timeSlots.length > 0 && (
+          {selectedSchedule && (
             <div className="flex gap-2">
-              {timeSlots.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => setSelectedTimeSlot(t)}
-                  className={`flex-1 py-3 px-3 rounded-xl border text-sm transition-colors cursor-pointer flex flex-col gap-1
-                    ${
-                      selectedTimeSlot?.id === t.id
-                        ? "border-indigo-600 bg-white text-indigo-700"
-                        : "border-gray-200 bg-white text-gray-500"
-                    }`}
-                >
-                  <span className="font-medium">{t.name}</span>
-                  <span className="text-xs text-gray-400">
-                    {t.startTime} – {t.endTime}
-                  </span>
-                </button>
-              ))}
+              {ALL_TIME_SLOTS.map((slot) => {
+                const available = getAvailableTimeSlot(slot);
+                const isAvailable = !!available;
+                const isSelected = selectedTimeSlot?.id === available?.id;
+
+                return (
+                  <button
+                    key={slot.key}
+                    onClick={() => {
+                      if (!isAvailable) return;
+                      if (selectedTimeSlot?.id === available.id) {
+                        setSelectedTimeSlot(null);
+                        setSelectedSession(null);
+                        setAvailableSessionTypes([]);
+                      } else {
+                        setSelectedTimeSlot(available);
+                      }
+                    }}
+                    disabled={!isAvailable}
+                    className={`flex-1 py-3 px-3 rounded-xl border text-sm transition-colors flex flex-col gap-1
+                      ${
+                        isSelected
+                          ? "border-indigo-600 bg-white text-indigo-700 cursor-pointer"
+                          : isAvailable
+                            ? "border-gray-200 bg-white text-gray-500 cursor-pointer"
+                            : "border-gray-100 bg-white text-gray-300 cursor-not-allowed"
+                      }`}
+                  >
+                    <span className="font-medium">{slot.name}</span>
+                    <span className="text-xs">
+                      {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -156,36 +223,49 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
               </span>
               <h3 className="text-xl font-bold text-gray-400">Session Type</h3>
             </div>
-            <img
-              src={ArrowDownIcon}
-              alt="arrow down icon"
-              className="cursor-pointer"
-            />
+            <img src={ArrowDownIcon} alt="arrow" className="cursor-pointer" />
           </div>
-          {selectedTimeSlot && sessionTypes.length > 0 && (
+          {selectedTimeSlot && (
             <div className="flex gap-2">
-              {sessionTypes.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setSelectedSession(s)}
-                  className={`flex-1 py-3 px-3 rounded-xl border text-sm transition-colors cursor-pointer flex flex-col items-center gap-1
-                    ${
-                      selectedSession?.id === s.id
-                        ? "border-indigo-600 bg-white text-indigo-700"
-                        : "border-gray-200 bg-white text-gray-500"
-                    }`}
-                >
-                  <span className="font-medium">{s.name}</span>
-                  <span className="text-xs text-gray-400">{s.location}</span>
-                  <span
-                    className={`text-xs font-medium ${s.priceModifier === 0 ? "text-indigo-500" : "text-gray-600"}`}
+              {ALL_SESSION_TYPES.map((session) => {
+                const available = getAvailableSession(session);
+                const isAvailable = !!available;
+                const isSelected = selectedSession?.id === available?.id;
+                const price = available
+                  ? parseFloat(available.priceModifier)
+                  : 0;
+
+                return (
+                  <button
+                    key={session.key}
+                    onClick={() => {
+                      if (!isAvailable) return;
+                      setSelectedSession(
+                        selectedSession?.id === available.id ? null : available,
+                      );
+                    }}
+                    disabled={!isAvailable}
+                    className={`flex-1 py-3 px-3 rounded-xl border text-sm transition-colors flex flex-col items-center gap-1
+                      ${
+                        isSelected
+                          ? "border-indigo-600 bg-white text-indigo-700 cursor-pointer"
+                          : isAvailable
+                            ? "border-gray-200 bg-white text-gray-500 cursor-pointer"
+                            : "border-gray-100 bg-white text-gray-300 cursor-not-allowed"
+                      }`}
                   >
-                    {s.priceModifier === 0
-                      ? "Included"
-                      : `+ $${s.priceModifier}`}
-                  </span>
-                </button>
-              ))}
+                    <span className="font-medium">{session.name}</span>
+                    <span className="text-xs">{session.location}</span>
+                    {isAvailable && (
+                      <span
+                        className={`text-xs font-medium ${price === 0 ? "text-indigo-500" : "text-gray-600"}`}
+                      >
+                        {price === 0 ? "Included" : `+ $${price}`}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -197,11 +277,13 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
             </span>
           </div>
           <div className="flex flex-col gap-1">
-            <div className="flex items-center justify-between text-sm text-[#333333]">
+            <div className="flex items-center justify-between text-sm">
               <span className="text-[#8A8A8A]">Base Price</span>
-              <span className="text-[#333333]">+ $0</span>
+              <span className="text-[#333333]">
+                + ${Number(basePrice).toFixed(0)}
+              </span>
             </div>
-            <div className="flex items-center justify-between text-sm text-[#333333]">
+            <div className="flex items-center justify-between text-sm">
               <span className="text-[#8A8A8A]">Session Type</span>
               <span className="text-[#333333]">+ ${sessionPrice}</span>
             </div>
@@ -210,8 +292,9 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
             Enroll Now
           </button>
         </div>
+
         {!IsLoggedIn && <AuthReq />}
-        {!IsUserCompleted && <CompleteReq />}
+        {IsLoggedIn && !IsUserCompleted && <CompleteReq />}
       </div>
     </div>
   );
