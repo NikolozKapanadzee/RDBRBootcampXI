@@ -1,17 +1,17 @@
 import { forwardRef } from "react";
 import type { InputProps } from "../../../types";
 import type { IconType } from "react-icons";
-
 interface Props extends InputProps {
   icon?: IconType;
+  onIconClick?: () => void;
 }
-
 const Input = forwardRef<HTMLInputElement, Props>(
   (
     {
       label,
       error,
       icon: Icon,
+      onIconClick,
       placeholder,
       type = "text",
       value,
@@ -36,13 +36,17 @@ const Input = forwardRef<HTMLInputElement, Props>(
             onChange={onChange}
             placeholder={placeholder}
             className={`w-full min-w-90 border rounded-lg px-4 py-3 outline-none ${
-              error ? "border-red-500" : "#D1D1D1"
+              error ? "border-red-500" : "border-[#D1D1D1]"
             } ${Icon ? "pr-10" : ""}`}
           />
           {Icon && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <button
+              type="button"
+              onClick={onIconClick}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
+            >
               <Icon className="w-5 h-5" />
-            </div>
+            </button>
           )}
         </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}

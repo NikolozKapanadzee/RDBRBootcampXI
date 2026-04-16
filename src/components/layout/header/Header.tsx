@@ -8,7 +8,7 @@ import { useAuthStore } from "../../../store/authStore";
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const { openLogin, openRegister, openProfile } = useModalStore();
+  const { openLogin, openRegister, openProfile, openSidebar } = useModalStore();
   const { token, user } = useAuthStore();
 
   const isLoggedIn = !!token;
@@ -29,7 +29,10 @@ const Header = () => {
 
         {isLoggedIn ? (
           <>
-            <div className="flex items-center gap-2">
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={openSidebar}
+            >
               <img src={EnrolledCoursesIcon} alt="Enrolled Courses Icon" />
               <p className="text-(--text-primary)">Enrolled Courses</p>
             </div>

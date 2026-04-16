@@ -20,9 +20,11 @@ export interface ModalStore {
   isLoginOpen: boolean;
   isRegisterOpen: boolean;
   isProfileOpen: boolean;
+  isSidebarOpen: boolean;
   openLogin: () => void;
   openRegister: () => void;
   openProfile: () => void;
+  openSidebar: () => void;
   closeAll: () => void;
 }
 export interface ModalProps {
@@ -103,4 +105,27 @@ export interface UpperCatalogProps {
   currentPage: number;
   activeSort: string;
   setActiveSort: (sort: string) => void;
+}
+
+export interface Enrollment {
+  id: number;
+  progress: number;
+  completedAt: string | null;
+  course: {
+    id: number;
+    title: string;
+    image: string;
+    avgRating: number;
+    instructor: {
+      id: number;
+      name: string;
+      avatar: string;
+    };
+  };
+  schedule: {
+    weeklySchedule: { id: number; label: string };
+    timeSlot: { id: number; label: string };
+    sessionType: { id: number; name: string };
+    location: string | null;
+  };
 }

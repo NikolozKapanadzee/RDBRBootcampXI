@@ -147,3 +147,13 @@ export const deleteEnrollment = async (enrollmentId: number, token: string) => {
   );
   return res.status;
 };
+export const getEnrollments = async (token: string) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/enrollments`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+  const data = await res.json();
+  return data.data;
+};

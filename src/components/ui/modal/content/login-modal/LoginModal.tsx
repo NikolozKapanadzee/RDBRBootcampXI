@@ -1,4 +1,4 @@
-import { FiEye } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import Input from "../../../input/Input";
 import Modal from "../../Modal";
 import { useModalStore } from "../../../../../store/modalStore";
@@ -8,14 +8,18 @@ import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { LoginSchema } from "../../../../../validations/LoginSchema";
 import { loginUser, getMe } from "../../../../../api/auth";
 import { useAuthStore } from "../../../../../store/authStore";
+import { useState } from "react";
 const LoginModal = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const { isLoginOpen, closeAll } = useModalStore();
+  const { setUser, setToken } = useAuthStore();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(LoginSchema) });
-  const { setUser, setToken } = useAuthStore();
+  } = useForm({
+    resolver: yupResolver(LoginSchema),
+  });
   const onSubmit = async (data: any) => {
     const response = await loginUser(data.email, data.password);
     setToken(response.data.token);
@@ -23,7 +27,6 @@ const LoginModal = () => {
     setUser(me.data);
     closeAll();
   };
-
   return (
     <Modal
       isOpen={isLoginOpen}
@@ -47,8 +50,9 @@ const LoginModal = () => {
         <Input
           label="Password"
           placeholder="••••••••"
-          type="password"
-          icon={FiEye}
+          type={showPassword ? "text" : "password"}
+          icon={showPassword ? FiEyeOff : FiEye}
+          onIconClick={() => setShowPassword((prev) => !prev)}
           error={errors.password?.message}
           {...register("password")}
         />
@@ -64,7 +68,8 @@ const LoginModal = () => {
         <p className="text-[#8A8A8A]">or</p>
         <hr className="flex-1 text-[#D1D1D1]" />
       </div>
-      <div className="flex items-center gap-2  mt-4">
+
+      <div className="flex items-center gap-2 mt-4">
         <p className="text-(--text-secondary)">Don’t have an account?</p>
         <p className="text-[#141414] underline font-medium cursor-pointer">
           Sign Up
@@ -73,4 +78,5 @@ const LoginModal = () => {
     </Modal>
   );
 };
+
 export default LoginModal;
