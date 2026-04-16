@@ -6,9 +6,11 @@ import { useAuthStore } from "../../store/authStore";
 const Dashboard = () => {
   const { token } = useAuthStore();
   const isLoggedIn = !!token;
+
   return (
     <div>
       <HeroSlider />
+      {isLoggedIn && <InProgressCourses />}
       <FeaturedCourses />
       {!isLoggedIn && <InProgressCourses />}
     </div>

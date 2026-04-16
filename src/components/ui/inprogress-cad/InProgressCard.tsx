@@ -10,10 +10,10 @@ const InProgressCard = ({
   percentage,
 }: InProgressCarsProps) => {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between p-4 w-146.5 h-58">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between p-4 h-full min-h-48">
       <div className="flex gap-3">
         <img
-          className="w-38 h-33 rounded-lg object-cover shrink-0"
+          className="w-32 h-28 rounded-lg object-cover shrink-0"
           src={thumbnail}
           alt="course thumbnail"
         />
