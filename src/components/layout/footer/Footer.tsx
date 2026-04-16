@@ -4,10 +4,17 @@ import InstagramIcon from "../../../assets/Instagram.svg";
 import LinkedinIcon from "../../../assets/LinkedIn.svg";
 import TwitterIcon from "../../../assets/Twitter.svg";
 import YoutubeIcon from "../../../assets/YouTube.svg";
+import { useModalStore } from "../../../store/modalStore";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../store/authStore";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const { token } = useAuthStore();
+  const { openProfile, openLogin, openSidebar } = useModalStore();
+  const isLoggesIn = !!token;
   return (
-    <footer className="bg-[#F3F4F6] px-14 py-6">
+    <footer className="bg-[#F3F4F6] px-14 py-6 border-t border-[#D1D1D1] mt-15">
       <div className="flex justify-between pb-16 pt-12">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
@@ -39,12 +46,27 @@ const Footer = () => {
         <div className="flex gap-16">
           <div className="flex flex-col gap-2">
             <p className="text-[#130E67] text-xl">Explore</p>
-            <p className="text-(--text-secondary)">Enrolled Courses</p>
-            <p className="text-(--text-secondary)">Browse Courses</p>
+            <p
+              className="text-(--text-secondary) cursor-pointer"
+              onClick={isLoggesIn ? openSidebar : openLogin}
+            >
+              Enrolled Courses
+            </p>
+            <p
+              className="text-(--text-secondary) cursor-pointer"
+              onClick={() => navigate("/browse")}
+            >
+              Browse Courses
+            </p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-[#130E67] text-xl">Account</p>
-            <p className="text-(--text-secondary)">My Profile</p>
+            <p
+              className="text-(--text-secondary) cursor-pointer"
+              onClick={openProfile}
+            >
+              My Profile
+            </p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-[#130E67] text-xl">Contact</p>

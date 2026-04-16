@@ -5,6 +5,7 @@ import { FiUpload, FiChevronLeft } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepThreeSchema } from "../../../../../validations/RegisterStepThreeSchema";
+import { useModalStore } from "../../../../../store/modalStore";
 
 type Props = {
   onBack: () => void;
@@ -46,6 +47,7 @@ const StepThree = ({
     handleFormSubmit(data);
   };
 
+  const { openLogin, closeAll } = useModalStore();
   return (
     <div className="flex flex-col items-center relative w-full">
       <button
@@ -122,7 +124,13 @@ const StepThree = ({
 
       <div className="flex items-center gap-2 mt-2">
         <p className="text-(--text-secondary)">Already have an account?</p>
-        <p className="text-[#141414] underline font-medium cursor-pointer">
+        <p
+          className="text-[#141414] underline font-medium cursor-pointer"
+          onClick={() => {
+            closeAll();
+            openLogin();
+          }}
+        >
           Log In
         </p>
       </div>

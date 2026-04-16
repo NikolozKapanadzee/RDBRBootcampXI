@@ -6,6 +6,7 @@ import Input from "../../../input/Input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepTwoSchema } from "../../../../../validations/RegisterStepTwoSchema";
+import { useModalStore } from "../../../../../store/modalStore";
 
 type Props = {
   onNext: (data: any) => void;
@@ -13,6 +14,7 @@ type Props = {
   apiErrors?: Record<string, string>;
 };
 const StepTwo = ({ onNext, onBack, apiErrors }: Props) => {
+  const { openLogin, closeAll } = useModalStore();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {
@@ -79,7 +81,13 @@ const StepTwo = ({ onNext, onBack, apiErrors }: Props) => {
       </div>
       <div className="flex items-center gap-2 mt-4">
         <p className="text-(--text-secondary)">Already have an account?</p>
-        <p className="text-[#141414] underline font-medium cursor-pointer">
+        <p
+          className="text-[#141414] underline font-medium cursor-pointer"
+          onClick={() => {
+            closeAll();
+            openLogin();
+          }}
+        >
           Log In
         </p>
       </div>

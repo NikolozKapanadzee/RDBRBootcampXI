@@ -13,7 +13,7 @@ const Header = () => {
 
   const isLoggedIn = !!token;
   return (
-    <header className="flex items-center justify-between px-14 py-4 bg-[#F3F4F6]">
+    <header className="flex items-center justify-between px-14 py-4 bg-[#F3F4F6] border-b border-[#D1D1D1] mb-10">
       <Link to="/">
         <div className="cursor-pointer">
           <img src={ProjectLogo} alt="Project Logo" />

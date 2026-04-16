@@ -3,6 +3,7 @@ import Button from "../../../button/Button";
 import Input from "../../../input/Input";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepOneSchema } from "../../../../../validations/RegisterStepOneSchema";
+import { useModalStore } from "../../../../../store/modalStore";
 
 type Props = {
   onNext: (data: any) => void;
@@ -17,6 +18,7 @@ const StepOne = ({ onNext, apiErrors }: Props) => {
   } = useForm({ resolver: yupResolver(RegisterStepOneSchema) });
 
   const onSubmit = (data: any) => onNext(data);
+  const { openLogin, closeAll } = useModalStore();
 
   return (
     <div className="flex flex-col items-center">
@@ -57,7 +59,13 @@ const StepOne = ({ onNext, apiErrors }: Props) => {
 
       <div className="flex items-center gap-2 mt-2">
         <p className="text-(--text-secondary)">Already have an account?</p>
-        <p className="text-[#141414] underline font-medium cursor-pointer">
+        <p
+          className="text-[#141414] underline font-medium cursor-pointer"
+          onClick={() => {
+            closeAll();
+            openLogin();
+          }}
+        >
           Log In
         </p>
       </div>

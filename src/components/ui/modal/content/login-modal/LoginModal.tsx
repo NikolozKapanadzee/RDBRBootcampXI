@@ -11,7 +11,7 @@ import { useAuthStore } from "../../../../../store/authStore";
 import { useState } from "react";
 const LoginModal = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { isLoginOpen, closeAll } = useModalStore();
+  const { isLoginOpen, closeAll, openRegister } = useModalStore();
   const { setUser, setToken } = useAuthStore();
   const {
     register,
@@ -71,7 +71,13 @@ const LoginModal = () => {
 
       <div className="flex items-center gap-2 mt-4">
         <p className="text-(--text-secondary)">Don’t have an account?</p>
-        <p className="text-[#141414] underline font-medium cursor-pointer">
+        <p
+          className="text-[#141414] underline font-medium cursor-pointer"
+          onClick={() => {
+            closeAll();
+            openRegister();
+          }}
+        >
           Sign Up
         </p>
       </div>
