@@ -79,3 +79,23 @@ export const getSessionTypes = async (
   const data = await res.json();
   return data.data;
 };
+export const enrollInCourse = async (
+  courseId: number,
+  courseScheduleId: number,
+  force: boolean = false,
+  token: string,
+) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/enrollments`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ courseId, courseScheduleId, force }),
+    },
+  );
+  const data = await res.json();
+  return { status: res.status, data };
+};

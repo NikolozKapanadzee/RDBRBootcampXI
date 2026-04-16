@@ -3,6 +3,7 @@ import {
   getWeeklySchedules,
   getTimeSlots,
   getSessionTypes,
+  enrollInCourse,
 } from "../../../api/courses";
 import ArrowDownIcon from "../../../assets/glyphs_arrow-bold.svg";
 import AuthReq from "../../ui/warning/AuthReq";
@@ -13,12 +14,12 @@ import { ALL_SCHEDULES } from "../../../constants/all-schedules";
 import { ALL_TIME_SLOTS } from "../../../constants/all-time-slots";
 import { ALL_SESSION_TYPES } from "../../../constants/all-session-types";
 import { useModalStore } from "../../../store/modalStore";
-
 interface EnrollmentCardProps {
   courseId: number;
   basePrice: number;
+  courseTitle: string;
+  onSuccess: (enrollmentData: any) => void;
 }
-
 const formatTime = (time: string) => {
   const [h, m] = time.split(":");
   const hour = parseInt(h);
@@ -26,8 +27,11 @@ const formatTime = (time: string) => {
   const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
   return `${displayHour}:${m} ${ampm}`;
 };
-
-const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
+const EnrollmentCard = ({
+  courseId,
+  basePrice,
+  onSuccess,
+}: EnrollmentCardProps) => {
   const { token, user } = useAuthStore();
   const IsLoggedIn = !!token;
   const IsUserCompleted = user?.profileComplete;
@@ -40,7 +44,39 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<any>(null);
   const [selectedSession, setSelectedSession] = useState<any>(null);
 
+  const [isEnrolling, setIsEnrolling] = useState(false);
+  const [showConflictModal, setShowConflictModal] = useState(false);
+  const [conflictData, setConflictData] = useState<any[]>([]);
+
   const { openLogin } = useModalStore();
+
+  const handleEnroll = async (force: boolean = false) => {
+    if (!IsLoggedIn) {
+      openLogin();
+      return;
+    }
+    if (!selectedSession) return;
+    setIsEnrolling(true);
+    try {
+      const { status, data } = await enrollInCourse(
+        courseId,
+        selectedSession.courseScheduleId,
+        force,
+        token,
+      );
+      if (status === 409 && data.conflicts?.length > 0) {
+        setConflictData(data.conflicts);
+        setShowConflictModal(true);
+        return;
+      }
+
+      if (status === 200 || status === 201) {
+        onSuccess(data.data);
+      }
+    } finally {
+      setIsEnrolling(false);
+    }
+  };
 
   const handleEnrollClick = () => {
     if (!IsLoggedIn) {
@@ -48,8 +84,9 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
       return;
     }
     if (!selectedSession) return;
-    console.log("Enroll user");
+    handleEnroll(false);
   };
+
   useEffect(() => {
     const fetch = async () => {
       const data = await getWeeklySchedules(courseId);
@@ -130,7 +167,7 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
                     setSelectedSession(null);
                   }}
                   disabled={!isAvailable}
-                  className={`flex-1 py-4 px-2  w-31 h-23 rounded-xl border text-sm font-medium transition-colors
+                  className={`flex-1 py-4 px-2 w-31 h-23 rounded-xl border text-sm font-medium transition-colors
                     ${
                       isSelected
                         ? "border-indigo-500 bg-indigo-100 text-indigo-700"
@@ -193,7 +230,6 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
                         !isAvailable && "opacity-30 grayscale"
                       }`}
                     />
-
                     <div className="flex flex-col leading-tight">
                       <span className="font-medium text-[14px]">
                         {slot.name}
@@ -273,7 +309,6 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
                         {priceMod === 0 ? "Included" : `+ $${priceMod}`}
                       </span>
                     </button>
-
                     <div className="text-xs text-center min-h-4">
                       {isFullyBooked && (
                         <span className="text-red-500 font-medium">
@@ -324,13 +359,56 @@ const EnrollmentCard = ({ courseId, basePrice }: EnrollmentCardProps) => {
             disabled={IsLoggedIn && !selectedSession && IsUserCompleted}
             className={`w-full py-4 rounded-[10px] font-medium mt-2 transition-all ${selectedSession ? "bg-[#130E67] text-white cursor-pointer hover:bg-indigo-800" : "bg-[#EEEDFC] text-[#B7B3F4] cursor-not-allowed"}`}
           >
-            Enroll Now
+            {isEnrolling ? "Enrolling..." : "Enroll Now"}
           </button>
         </div>
-
         {!IsLoggedIn && <AuthReq />}
         {IsLoggedIn && !IsUserCompleted && <CompleteReq />}
       </div>
+      {showConflictModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 flex flex-col gap-4">
+            <h3 className="text-lg font-bold text-[#130E67]">
+              Schedule Conflict
+            </h3>
+            <div className="flex flex-col gap-2">
+              {conflictData.map((conflict: any, i: number) => (
+                <p key={i} className="text-sm text-gray-600">
+                  You are already enrolled in{" "}
+                  <span className="font-semibold text-[#130E67]">
+                    {conflict.courseName}
+                  </span>{" "}
+                  with the same schedule:{" "}
+                  <span className="font-medium">
+                    {conflict.days} at {conflict.time}
+                  </span>
+                  .
+                </p>
+              ))}
+            </div>
+            <p className="text-sm text-gray-500">
+              Are you sure you want to continue?
+            </p>
+            <div className="flex gap-3 mt-2">
+              <button
+                onClick={() => setShowConflictModal(false)}
+                className="flex-1 py-3 rounded-xl border border-gray-300 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowConflictModal(false);
+                  handleEnroll(true);
+                }}
+                className="flex-1 py-3 rounded-xl bg-[#130E67] text-white text-sm font-medium hover:bg-indigo-800 transition-colors"
+              >
+                Continue Anyway
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
