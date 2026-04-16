@@ -1,8 +1,8 @@
+import { useState } from "react";
 import { RiEyeCloseLine } from "react-icons/ri";
+import { FiEye, FiChevronLeft } from "react-icons/fi";
 import Button from "../../../button/Button";
 import Input from "../../../input/Input";
-import { FiEye } from "react-icons/fi";
-import { FiChevronLeft } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/src/yup.js";
 import { RegisterStepTwoSchema } from "../../../../../validations/RegisterStepTwoSchema";
@@ -12,15 +12,17 @@ type Props = {
   onBack: () => void;
   apiErrors?: Record<string, string>;
 };
-
 const StepTwo = ({ onNext, onBack, apiErrors }: Props) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(RegisterStepTwoSchema) });
+  } = useForm({
+    resolver: yupResolver(RegisterStepTwoSchema),
+  });
   const onSubmit = (data: any) => onNext(data);
-
   return (
     <div className="flex flex-col items-center">
       <button
@@ -45,17 +47,19 @@ const StepTwo = ({ onNext, onBack, apiErrors }: Props) => {
       <div className="flex flex-col gap-6">
         <Input
           label="Password*"
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
-          icon={FiEye}
+          icon={showPassword ? RiEyeCloseLine : FiEye}
+          onIconClick={() => setShowPassword((prev) => !prev)}
           error={errors.password?.message || apiErrors?.password}
           {...register("password")}
         />
         <Input
           label="Confirm Password*"
-          type="password"
+          type={showConfirmPassword ? "text" : "password"}
           placeholder="Confirm Password"
-          icon={RiEyeCloseLine}
+          icon={showConfirmPassword ? RiEyeCloseLine : FiEye}
+          onIconClick={() => setShowConfirmPassword((prev) => !prev)}
           error={
             errors.confirmPassword?.message || apiErrors?.password_confirmation
           }

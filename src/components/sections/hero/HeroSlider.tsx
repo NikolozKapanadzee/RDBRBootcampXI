@@ -4,8 +4,9 @@ import Button from "../../ui/button/Button";
 import defaultImage from "../../../assets/default.png";
 import secondImage from "../../../assets/8584b867d5528160322fe2dc7fe7c6da6d295c19.png";
 import thirdImage from "../../../assets/variant3.png";
-
+import { useNavigate } from "react-router-dom";
 const HeroSlider = () => {
+  const navigate = useNavigate();
   return (
     <Swiper
       modules={[Navigation, Pagination]}
@@ -25,7 +26,11 @@ const HeroSlider = () => {
             business, and more. Find the skills you need to grow your career and
             learn at your own pace.
           </p>
-          <Button className="w-50 h-16" variant="primary">
+          <Button
+            className="w-50 h-16"
+            variant="primary"
+            onClick={() => navigate("/browse")}
+          >
             Browse Courses
           </Button>
         </div>
@@ -40,11 +45,13 @@ const HeroSlider = () => {
             Pick up where you left off
           </h1>
           <p className="font-light text-2xl text-white">
-            Your learning journey is already in progress. Continue your enrolled
-            courses, track your progress, and stay on track toward completing
-            your goals.
+            Your learning journey is already in progress.
           </p>
-          <Button className="w-45 h-16" variant="primary">
+          <Button
+            className="w-45 h-16"
+            variant="primary"
+            onClick={() => navigate("/browse")}
+          >
             Start Learning
           </Button>
         </div>
@@ -57,7 +64,11 @@ const HeroSlider = () => {
           <h1 className="font-bold text-6xl text-white">
             Learn together, grow faster
           </h1>
-          <Button className="w-40 h-16 mt-12" variant="primary">
+          <Button
+            className="w-40 h-16 mt-12"
+            variant="primary"
+            onClick={() => navigate("/browse")}
+          >
             Learn More
           </Button>
         </div>

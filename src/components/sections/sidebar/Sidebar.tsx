@@ -75,7 +75,13 @@ const Sidebar = () => {
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
               aria-label="Close sidebar"
             >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="cursor-pointer"
+              >
                 <path
                   d="M12 4L4 12M4 4l8 8"
                   stroke="currentColor"
