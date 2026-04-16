@@ -11,6 +11,7 @@ import { getMe } from "./api/auth";
 import { Route, Routes } from "react-router-dom";
 import Browse from "./pages/browse/Browse";
 import InsideCoursePage from "./components/sections/inside-course/InsideCoursePage";
+import Sidebar from "./components/sections/sidebar/Sidebar";
 
 function App() {
   const { token, setUser } = useAuthStore();
@@ -37,6 +38,7 @@ function App() {
       <LoginModal />
       <RegisterModal />
       <ProfileModal />
+      <Sidebar />
     </MainLayout>
   );
 }
