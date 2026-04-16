@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getCourseById } from "../../../api/courses";
+import { getCourseById, getEnrollments } from "../../../api/courses";
+import { useAuthStore } from "../../../store/authStore";
 import StartIcon from "../../../assets/Star.svg";
 import CalendarIcon from "../../../assets/ClockIcon.svg";
 import ClockIcon from "../../../assets/ClockIcon2.svg";
@@ -9,6 +10,7 @@ import EnrollmentCard from "../enrolment-card/EnrollmentCard";
 import EnrolledCard from "../enroled-card-info/EnrolledCard";
 const InsideCoursePage = () => {
   const { id } = useParams();
+  const { token } = useAuthStore();
   const [course, setCourse] = useState<any>(null);
   const [enrollment, setEnrollment] = useState<any>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -19,6 +21,21 @@ const InsideCoursePage = () => {
     };
     fetch();
   }, [id]);
+  useEffect(() => {
+    if (!token || !id) return;
+    const fetchEnrollment = async () => {
+      try {
+        const enrollments = await getEnrollments(token);
+        const existing = enrollments.find(
+          (e: any) => e.course.id === Number(id),
+        );
+        if (existing) setEnrollment(existing);
+      } catch (err) {
+        console.error("Failed to fetch enrollment:", err);
+      }
+    };
+    fetchEnrollment();
+  }, [id, token]);
   if (!course) return <div className="p-8">Course not found</div>;
   const avgRating = course.reviews?.length
     ? (
