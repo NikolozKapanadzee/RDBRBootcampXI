@@ -3,6 +3,7 @@ import CalendarIcon from "../../../assets/CalendarSetIcon.svg";
 import ClockIcon from "../../../assets/ClockSetIcon.svg";
 import MonitorIcon from "../../../assets/MonitorSetIcon.svg";
 import LocationIcon from "../../../assets/LocationSetIcon.svg";
+import CongratsIcon from "../../../assets/CongratsIcon.svg";
 import {
   completeEnrollment,
   submitReview,
@@ -282,39 +283,8 @@ const EnrolledCard = ({
       {showCongrats && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-10 max-w-sm w-full mx-4 flex flex-col items-center gap-5">
-            <svg
-              width="72"
-              height="72"
-              viewBox="0 0 72 72"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 60L32 20l20 20L12 60z"
-                stroke="#22C55E"
-                strokeWidth="3"
-                strokeLinejoin="round"
-                fill="none"
-              />
-              <circle cx="52" cy="14" r="3" fill="#22C55E" />
-              <circle cx="60" cy="24" r="2" fill="#22C55E" />
-              <circle cx="58" cy="8" r="2" fill="#22C55E" />
-              <path
-                d="M40 10 Q44 6 48 10"
-                stroke="#22C55E"
-                strokeWidth="2"
-                strokeLinecap="round"
-                fill="none"
-              />
-              <path
-                d="M56 30 Q60 26 64 30"
-                stroke="#22C55E"
-                strokeWidth="2"
-                strokeLinecap="round"
-                fill="none"
-              />
-            </svg>
-            <h3 className="text-2xl font-bold text-[#130E67] text-center">
+            <img src={CongratsIcon} alt="congrats icon" />
+            <h3 className="text-2xl font-bold text-[#3D3D3D] text-center">
               Congratulations!
             </h3>
             <p className="text-gray-500 text-center text-sm leading-relaxed">
@@ -329,7 +299,7 @@ const EnrolledCard = ({
             <button
               onClick={rating > 0 ? handleSubmitRating : handleCongratsClose}
               disabled={isSubmittingReview}
-              className="w-full py-4 rounded-xl bg-[#130E67] text-white font-medium hover:bg-indigo-800 transition-colors disabled:opacity-70"
+              className="w-full py-4 rounded-xl bg-[#4F46E5] text-white font-medium hover:bg-indigo-800 transition-colors disabled:opacity-70"
             >
               {isSubmittingReview ? "Submitting..." : "Done"}
             </button>

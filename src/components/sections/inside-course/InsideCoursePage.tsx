@@ -133,7 +133,7 @@ const InsideCoursePage = () => {
             </p>
             <button
               onClick={handleDone}
-              className="w-full py-4 rounded-xl bg-[#130E67] text-white font-medium hover:bg-indigo-800 transition-colors mt-2"
+              className="w-full py-4 rounded-xl bg-[#4F46E5] text-white font-medium hover:bg-indigo-800 transition-colors mt-2"
             >
               Done
             </button>

@@ -367,43 +367,73 @@ const EnrollmentCard = ({
       </div>
       {showConflictModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 flex flex-col gap-4">
-            <h3 className="text-lg font-bold text-[#130E67]">
-              Schedule Conflict
+          <div className="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 flex flex-col items-center gap-5">
+            <svg
+              width="72"
+              height="72"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                stroke="#F4A316"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+              <line
+                x1="12"
+                y1="9"
+                x2="12"
+                y2="13"
+                stroke="#F4A316"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <circle
+                cx="12"
+                cy="17"
+                r="0.5"
+                fill="#F4A316"
+                stroke="#F4A316"
+                strokeWidth="1.5"
+              />
+            </svg>
+
+            <h3 className="text-2xl font-bold text-[#0A0A0A] text-center">
+              Enrollment Conflict
             </h3>
-            <div className="flex flex-col gap-2">
+
+            <div className="flex flex-col gap-2 text-center">
               {conflictData.map((conflict: any, i: number) => (
-                <p key={i} className="text-sm text-gray-600">
+                <p key={i} className="text-sm text-gray-600 leading-relaxed">
                   You are already enrolled in{" "}
-                  <span className="font-semibold text-[#130E67]">
-                    {conflict.courseName}
+                  <span className="font-semibold">
+                    "{conflict.conflictingCourseName}"
                   </span>{" "}
                   with the same schedule:{" "}
-                  <span className="font-medium">
-                    {conflict.days} at {conflict.time}
-                  </span>
-                  .
+                  <span className="font-semibold">{conflict.schedule}</span>
                 </p>
               ))}
             </div>
-            <p className="text-sm text-gray-500">
-              Are you sure you want to continue?
-            </p>
-            <div className="flex gap-3 mt-2">
-              <button
-                onClick={() => setShowConflictModal(false)}
-                className="flex-1 py-3 rounded-xl border border-gray-300 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
+
+            <div className="flex gap-3 w-full mt-2">
               <button
                 onClick={() => {
                   setShowConflictModal(false);
                   handleEnroll(true);
                 }}
-                className="flex-1 py-3 rounded-xl bg-[#130E67] text-white text-sm font-medium hover:bg-indigo-800 transition-colors"
+                className="flex-1 py-3 rounded-xl border border-[#4F46E5] text-[#4F46E5] text-sm font-medium hover:bg-indigo-50 transition-colors cursor-pointer"
               >
                 Continue Anyway
+              </button>
+              <button
+                onClick={() => setShowConflictModal(false)}
+                className="flex-1 py-3 rounded-xl bg-[#4F46E5] text-white text-sm font-medium hover:bg-indigo-700 transition-colors cursor-pointer"
+              >
+                Cancel
               </button>
             </div>
           </div>
