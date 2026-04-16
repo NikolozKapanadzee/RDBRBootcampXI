@@ -3,8 +3,9 @@ import { useModalStore } from "../../../store/modalStore";
 import { useAuthStore } from "../../../store/authStore";
 import { getEnrollments } from "../../../api/courses";
 import { Link } from "react-router-dom";
-import { Calendar, Clock, Users, MapPin, Star, Package } from "lucide-react";
+import { Calendar, Clock, Users, MapPin, Star } from "lucide-react";
 import { Enrollment } from "../../../types";
+import EmptyBoxIcon from "../../../assets/EmptyBoxIcon.svg";
 const Sidebar = () => {
   const { isSidebarOpen, closeAll } = useModalStore();
   const { token } = useAuthStore();
@@ -105,19 +106,19 @@ const Sidebar = () => {
             </div>
           ) : enrollments.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full min-h-100 gap-5 text-center">
-              <Package size={80} strokeWidth={1} className="text-gray-300" />
+              <img src={EmptyBoxIcon} alt="empty box icon" />
               <div>
-                <p className="text-lg font-bold text-[#4F46E5]">
+                <p className="text-lg font-bold text-[#130E67]">
                   No Enrolled Courses Yet
                 </p>
-                <p className="text-sm text-[#4F46E5] mt-1">
+                <p className="text-sm text-[#130E67] mt-1">
                   Your learning journey starts here!
                   <br />
                   Browse courses to get started.
                 </p>
               </div>
               <Link to="/browse" onClick={closeAll}>
-                <button className="px-8 py-3 bg-[#4F46E5] text-white rounded-lg font-semibold hover:bg-[#4338CA] transition-colors">
+                <button className="px-8 py-3 bg-[#4F46E5] text-white rounded-lg font-semibold hover:bg-[#4338CA] transition-colors cursor-pointer">
                   Browse Courses
                 </button>
               </Link>
@@ -201,10 +202,10 @@ const Sidebar = () => {
                       </div>
                     </div>
                     <Link
-                      to={`/courses/${enrollment.course.id}`}
+                      to={`/course/${enrollment.course.id}`}
                       onClick={closeAll}
                     >
-                      <button className="px-5 py-1.5 border border-[#4F46E5] text-[#4F46E5] text-sm rounded-lg font-medium hover:bg-[#4F46E5] hover:text-white transition-colors shrink-0">
+                      <button className="px-5 py-1.5 border border-[#4F46E5] text-[#4F46E5] text-sm rounded-lg font-medium hover:bg-[#4F46E5] hover:text-white transition-colors shrink-0 cursor-pointer">
                         View
                       </button>
                     </Link>
