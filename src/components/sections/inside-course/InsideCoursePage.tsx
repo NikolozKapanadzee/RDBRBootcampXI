@@ -8,6 +8,7 @@ import ClockIcon from "../../../assets/ClockIcon2.svg";
 import { categoryIcons } from "../../../constants/categoryIcons";
 import EnrollmentCard from "../enrolment-card/EnrollmentCard";
 import EnrolledCard from "../enroled-card-info/EnrolledCard";
+import Breadcrumb from "../../ui/breadcrumb/Breadcrumb";
 const InsideCoursePage = () => {
   const { id } = useParams();
   const { token } = useAuthStore();
@@ -52,7 +53,8 @@ const InsideCoursePage = () => {
   };
   return (
     <section className="px-14 py-10">
-      <div className="flex gap-30 items-start">
+      <Breadcrumb />
+      <div className="flex gap-30 items-start mt-5">
         <div className="flex flex-col gap-6 flex-1">
           <h1 className="text-4xl font-bold text-[#0A0A0A]">{course.title}</h1>
           <img

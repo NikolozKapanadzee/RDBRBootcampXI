@@ -47,7 +47,12 @@ const Card = ({
             <span className="text-xs text-[#ADADAD]">Starting from</span>
             <span className="text-2xl font-bold text-[#333333]">${price}</span>
           </div>
-          <Button variant="primary" onClick={() => navigate(`/course/${id}`)}>
+          <Button
+            variant="primary"
+            onClick={() =>
+              navigate(`/course/${id}`, { state: { breadcrumb: category } })
+            }
+          >
             Details
           </Button>
         </div>
