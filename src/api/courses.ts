@@ -99,3 +99,51 @@ export const enrollInCourse = async (
   const data = await res.json();
   return { status: res.status, data };
 };
+export const completeEnrollment = async (
+  enrollmentId: number,
+  token: string,
+) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/enrollments/${enrollmentId}/complete`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  const data = await res.json();
+  return { status: res.status, data };
+};
+export const submitReview = async (
+  courseId: number,
+  rating: number,
+  token: string,
+) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/courses/${courseId}/reviews`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ rating }),
+    },
+  );
+  const data = await res.json();
+  return { status: res.status, data };
+};
+export const deleteEnrollment = async (enrollmentId: number, token: string) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/enrollments/${enrollmentId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return res.status;
+};

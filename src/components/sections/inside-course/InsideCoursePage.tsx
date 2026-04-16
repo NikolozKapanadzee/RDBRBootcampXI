@@ -90,7 +90,12 @@ const InsideCoursePage = () => {
         </div>
         <div className="w-133">
           {enrollment ? (
-            <EnrolledCard enrollment={enrollment} />
+            <EnrolledCard
+              enrollment={enrollment}
+              courseId={Number(id)}
+              courseTitle={course.title}
+              onCompleted={(updated) => setEnrollment(updated)}
+            />
           ) : (
             <EnrollmentCard
               courseId={Number(id)}
